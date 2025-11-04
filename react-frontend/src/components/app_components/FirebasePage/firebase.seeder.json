@@ -1,0 +1,62 @@
+[
+    {
+        "projectId": "cloudbashaai-prd",
+        "url": "https://cloudbashaai-prd.web.app/",
+        "customUrl": "https://cloudbasha.com/",
+        "key": "apiKey: \"AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL8\",\n  authDomain: \"cloudbashaai-prd.firebaseapp.com\",\n  projectId: \"cloudbashaai-prd\",\n  storageBucket: \"cloudbashaai-prd.firebasestorage.app\",\n  messagingSenderId: \"1031774158997\",\n  appId: \"1:1031774158997:web:8dc09bbc7de82e382f5b9c\",\n  measurementId: \"G-0Y7D6QW6JZ\"",
+        "env": "prd",
+        "projectNumber": 1031774158997,
+        "webApiKey": "AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL8",
+        "appId": "1:1031774158997:web:8dc09bbc7de82e382f5b9c"
+    },
+    {
+        "projectId": "cloudbashaai-stg",
+        "url": "https://cloudbashaai-prd.web.app/",
+        "customUrl": "https://cloudbasha.com/",
+        "key": "apiKey: \"AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL8\",\n  authDomain: \"cloudbashaai-prd.firebaseapp.com\",\n  projectId: \"cloudbashaai-prd\",\n  storageBucket: \"cloudbashaai-prd.firebasestorage.app\",\n  messagingSenderId: \"1031774158997\",\n  appId: \"1:1031774158997:web:8dc09bbc7de82e382f5b9c\",\n  measurementId: \"G-0Y7D6QW6JZ\"",
+        "env": "prd",
+        "projectNumber": 1031774158997,
+        "webApiKey": "AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL9",
+        "appId": "1:1031774158997:web:8dc09bbc7de82e382f5b9c"
+    },
+    {
+        "projectId": "codebridgeai-prd",
+        "url": "https://cloudbashaai-prd.web.app/",
+        "customUrl": "https://cloudbasha.com/",
+        "key": "apiKey: \"AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL8\",\n  authDomain: \"cloudbashaai-prd.firebaseapp.com\",\n  projectId: \"cloudbashaai-prd\",\n  storageBucket: \"cloudbashaai-prd.firebasestorage.app\",\n  messagingSenderId: \"1031774158997\",\n  appId: \"1:1031774158997:web:8dc09bbc7de82e382f5b9c\",\n  measurementId: \"G-0Y7D6QW6JZ\"",
+        "env": "prd",
+        "projectNumber": 1031774158997,
+        "webApiKey": "AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL10",
+        "appId": "1:1031774158997:web:8dc09bbc7de82e382f5b9c"
+    },
+    {
+        "projectId": "codebridgeai-stg",
+        "url": "https://cloudbashaai-prd.web.app/",
+        "customUrl": "https://cloudbasha.com/",
+        "key": "apiKey: \"AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL8\",\n  authDomain: \"cloudbashaai-prd.firebaseapp.com\",\n  projectId: \"cloudbashaai-prd\",\n  storageBucket: \"cloudbashaai-prd.firebasestorage.app\",\n  messagingSenderId: \"1031774158997\",\n  appId: \"1:1031774158997:web:8dc09bbc7de82e382f5b9c\",\n  measurementId: \"G-0Y7D6QW6JZ\"",
+        "env": "prd",
+        "projectNumber": 1031774158997,
+        "webApiKey": "AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL11",
+        "appId": "1:1031774158997:web:8dc09bbc7de82e382f5b9c"
+    },
+    {
+        "projectId": "cloudbashamgmt-prd",
+        "url": "https://cloudbashaai-prd.web.app/",
+        "customUrl": "https://cloudbasha.com/",
+        "key": "apiKey: \"AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL8\",\n  authDomain: \"cloudbashaai-prd.firebaseapp.com\",\n  projectId: \"cloudbashaai-prd\",\n  storageBucket: \"cloudbashaai-prd.firebasestorage.app\",\n  messagingSenderId: \"1031774158997\",\n  appId: \"1:1031774158997:web:8dc09bbc7de82e382f5b9c\",\n  measurementId: \"G-0Y7D6QW6JZ\"",
+        "env": "prd",
+        "projectNumber": 1031774158997,
+        "webApiKey": "AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL12",
+        "appId": "1:1031774158997:web:8dc09bbc7de82e382f5b9c"
+    },
+    {
+        "projectId": "cloudbashamgmt-stg",
+        "url": "https://cloudbashaai-prd.web.app/",
+        "customUrl": "https://cloudbasha.com/",
+        "key": "apiKey: \"AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL8\",\n  authDomain: \"cloudbashaai-prd.firebaseapp.com\",\n  projectId: \"cloudbashaai-prd\",\n  storageBucket: \"cloudbashaai-prd.firebasestorage.app\",\n  messagingSenderId: \"1031774158997\",\n  appId: \"1:1031774158997:web:8dc09bbc7de82e382f5b9c\",\n  measurementId: \"G-0Y7D6QW6JZ\"",
+        "env": "prd",
+        "projectNumber": 1031774158997,
+        "webApiKey": "AIzaSyD_Ff_SmYtX4LD-8wadet-BLPpjAJSjUL13",
+        "appId": "1:1031774158997:web:8dc09bbc7de82e382f5b9c"
+    }
+]

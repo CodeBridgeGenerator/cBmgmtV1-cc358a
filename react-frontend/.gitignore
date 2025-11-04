@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+package-lock.json
+
+# testing
+/coverage
+
+# production
+/build
+
+# environments
+.env
+.env_prd
+.env_sit
+.env_stg
+.env_test
+.env_uat

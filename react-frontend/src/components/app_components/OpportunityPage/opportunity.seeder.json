@@ -1,0 +1,52 @@
+[
+    {
+        "states": "Lead",
+        "percentage": 10,
+        "status": "Introduction"
+    },
+    {
+        "states": "Lead Qulaification",
+        "percentage": 20,
+        "status": "Approved"
+    },
+    {
+        "states": "Opportunity",
+        "percentage": 30,
+        "status": "Identified"
+    },
+    {
+        "states": "Requirements",
+        "percentage": 40,
+        "status": "Agreed"
+    },
+    {
+        "states": "Proposal",
+        "percentage": 50,
+        "status": "Submitted"
+    },
+    {
+        "states": "Quote",
+        "percentage": 60,
+        "status": "Submitted"
+    },
+    {
+        "states": "Price Nego",
+        "percentage": 80,
+        "status": "Completed"
+    },
+    {
+        "states": "Closed",
+        "percentage": 100,
+        "status": "Won"
+    },
+    {
+        "states": "Closed",
+        "percentage": 0,
+        "status": "Lost"
+    },
+    {
+        "states": "KIV",
+        "percentage": 0,
+        "status": "KIV"
+    }
+]
