@@ -5,4 +5,5 @@ export { layout } from "./layoutModel";
 export { user } from "./userModel";
 export { cache } from "./cacheModel";
 export { db } from "./dbModel";
+export { apiKey } from "./apiKeyModel";
 // ~cb-add-service-models-imports~

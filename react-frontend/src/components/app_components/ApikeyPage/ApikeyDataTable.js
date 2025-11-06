@@ -1,15 +1,15 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import React, { useState, useRef, useEffect} from 'react';
-import _ from 'lodash';
-import { Button } from 'primereact/button';
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import React, { useState, useRef, useEffect } from "react";
+import _ from "lodash";
+import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import UploadService from "../../../services/UploadService";
-import { InputText } from 'primereact/inputtext';
+import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
-import DownloadCSV from "../../../utils/DownloadCSV";
+import { Chips } from "primereact/chips";
 import InboxCreateDialogComponent from "../../cb_components/InboxPage/InboxCreateDialogComponent";
 import InviteIcon from "../../../assets/media/Invite.png";
 import ExportIcon from "../../../assets/media/Export & Share.png";
@@ -18,29 +18,72 @@ import DuplicateIcon from "../../../assets/media/Duplicate.png";
 import DeleteIcon from "../../../assets/media/Trash.png";
 import { Checkbox } from "primereact/checkbox";
 
-const ApikeyDataTable = ({ items, fields, onEditRow, onRowDelete, onRowClick, searchDialog, setSearchDialog,   showUpload, setShowUpload,
-    showFilter, setShowFilter,
-    showColumns, setShowColumns, onClickSaveFilteredfields ,
-    selectedFilterFields, setSelectedFilterFields,
-    selectedHideFields, setSelectedHideFields, onClickSaveHiddenfields, loading, user,   selectedDelete,
-  setSelectedDelete, onCreateResult}) => {
-    const dt = useRef(null);
-    const urlParams = useParams();
-    const [globalFilter, setGlobalFilter] = useState('');
+const ApikeyDataTable = ({
+  items,
+  fields,
+  onEditRow,
+  onRowDelete,
+  onRowClick,
+  searchDialog,
+  setSearchDialog,
+  showUpload,
+  setShowUpload,
+  showFilter,
+  setShowFilter,
+  showColumns,
+  setShowColumns,
+  onClickSaveFilteredfields,
+  selectedFilterFields,
+  setSelectedFilterFields,
+  selectedHideFields,
+  setSelectedHideFields,
+  onClickSaveHiddenfields,
+  loading,
+  user,
+  selectedDelete,
+  setSelectedDelete,
+  onCreateResult,
+}) => {
+  const dt = useRef(null);
+  const urlParams = useParams();
+  const [globalFilter, setGlobalFilter] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [data, setData] = useState([]);
 
-const pTemplate0 = (rowData, { rowIndex }) => <p >{rowData.apikey}</p>
-const pTemplate1 = (rowData, { rowIndex }) => <p >{rowData.projectName}</p>
-const p_numberTemplate2 = (rowData, { rowIndex }) => <p >{rowData.requests}</p>
-const p_numberTemplate3 = (rowData, { rowIndex }) => <p >{rowData.duration}</p>
-const pTemplate4 = (rowData, { rowIndex }) => <p >{rowData.serviceName}</p>
-const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active)}</p>
-    const editTemplate = (rowData, { rowIndex }) => <Button onClick={() => onEditRow(rowData, rowIndex)} icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`} className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`} />;
-    const deleteTemplate = (rowData, { rowIndex }) => <Button onClick={() => onRowDelete(rowData._id)} icon="pi pi-times" className="p-button-rounded p-button-danger p-button-text" />;
-    
-      const checkboxTemplate = (rowData) => (
+  const pTemplate0 = (rowData, { rowIndex }) => <p>{rowData.apikey}</p>;
+  const pTemplate1 = (rowData, { rowIndex }) => <p>{rowData.projectName}</p>;
+  const p_numberTemplate2 = (rowData, { rowIndex }) => (
+    <p>{rowData.requests}</p>
+  );
+  const p_numberTemplate3 = (rowData, { rowIndex }) => (
+    <p>{rowData.duration}</p>
+  );
+  const pTemplate4 = (rowData, { rowIndex }) => (
+    <p>
+      {<Chips value={rowData.serviceName.slice(0, 4)} separator="," />}{" "}
+      {" click to see all"}
+    </p>
+  );
+  const p_booleanTemplate5 = (rowData, { rowIndex }) => (
+    <p>{rowData.active ? "Active" : "Blocked"}</p>
+  );
+  const editTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onEditRow(rowData, rowIndex)}
+      icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`}
+      className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`}
+    />
+  );
+  const deleteTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onRowDelete(rowData._id)}
+      icon="pi pi-times"
+      className="p-button-rounded p-button-danger p-button-text"
+    />
+  );
+
+  const checkboxTemplate = (rowData) => (
     <Checkbox
       checked={selectedItems.some((item) => item._id === rowData._id)}
       onChange={(e) => {
@@ -50,7 +93,7 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
           _selectedItems.push(rowData);
         } else {
           _selectedItems = _selectedItems.filter(
-            (item) => item._id !== rowData._id,
+            (item) => item._id !== rowData._id
           );
         }
         setSelectedItems(_selectedItems);
@@ -67,11 +110,11 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
 
     try {
       const promises = selectedItems.map((item) =>
-        client.service("companies").remove(item._id),
+        client.service("companies").remove(item._id)
       );
       await Promise.all(promises);
       const updatedData = data.filter(
-        (item) => !selectedItems.find((selected) => selected._id === item._id),
+        (item) => !selectedItems.find((selected) => selected._id === item._id)
       );
       setData(updatedData);
       setSelectedDelete(selectedItems.map((item) => item._id));
@@ -81,7 +124,7 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
       console.error("Failed to delete selected records", error);
     }
   };
-    
+
   const handleMessage = () => {
     setShowDialog(true); // Open the dialog
   };
@@ -90,10 +133,10 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
     setShowDialog(false); // Close the dialog
   };
 
-    return (
-        <>
-        <DataTable 
-           value={items}
+  return (
+    <>
+      <DataTable
+        value={items}
         ref={dt}
         removableSort
         onRowClick={onRowClick}
@@ -111,23 +154,68 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
         selection={selectedItems}
         onSelectionChange={(e) => setSelectedItems(e.value)}
         onCreateResult={onCreateResult}
-        >
-                <Column
+      >
+        <Column
           selectionMode="multiple"
           headerStyle={{ width: "3rem" }}
           body={checkboxTemplate}
         />
-<Column field="apikey" header="APIKEY" body={pTemplate0} filter={selectedFilterFields.includes("apikey")} hidden={selectedHideFields?.includes("apikey")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="projectName" header="projectName" body={pTemplate1} filter={selectedFilterFields.includes("projectName")} hidden={selectedHideFields?.includes("projectName")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="requests" header="requests" body={p_numberTemplate2} filter={selectedFilterFields.includes("requests")} hidden={selectedHideFields?.includes("requests")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="duration" header="duration" body={p_numberTemplate3} filter={selectedFilterFields.includes("duration")} hidden={selectedHideFields?.includes("duration")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="serviceName" header="serviceName" body={pTemplate4} filter={selectedFilterFields.includes("serviceName")} hidden={selectedHideFields?.includes("serviceName")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="active" header="active" body={p_booleanTemplate5} filter={selectedFilterFields.includes("active")} hidden={selectedHideFields?.includes("active")}  style={{ minWidth: "8rem" }} />
-            <Column header="Edit" body={editTemplate} />
-            <Column header="Delete" body={deleteTemplate} />
-            
-        </DataTable>
+        <Column
+          field="apikey"
+          header="API KEY"
+          body={pTemplate0}
+          filter={selectedFilterFields.includes("apikey")}
+          hidden={selectedHideFields?.includes("apikey")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="projectName"
+          header="Project"
+          body={pTemplate1}
+          filter={selectedFilterFields.includes("projectName")}
+          hidden={selectedHideFields?.includes("projectName")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="active"
+          header="Status"
+          sortable
+          body={p_booleanTemplate5}
+          filter={selectedFilterFields.includes("active")}
+          hidden={selectedHideFields?.includes("active")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="requests"
+          header="Requests"
+          body={p_numberTemplate2}
+          filter={selectedFilterFields.includes("requests")}
+          hidden={selectedHideFields?.includes("requests")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="duration"
+          header="Duration"
+          body={p_numberTemplate3}
+          filter={selectedFilterFields.includes("duration")}
+          hidden={selectedHideFields?.includes("duration")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="serviceName"
+          header="Services"
+          body={pTemplate4}
+          filter={selectedFilterFields.includes("serviceName")}
+          hidden={selectedHideFields?.includes("serviceName")}
+          style={{ minWidth: "8rem" }}
+        />
 
+        <Column header="Edit" body={editTemplate} />
+        <Column header="Delete" body={deleteTemplate} />
+      </DataTable>
 
       {selectedItems.length > 0 ? (
         <div
@@ -303,20 +391,28 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
         </div>
       ) : null}
 
-
-        <Dialog header="Upload Apikey Data" visible={showUpload} onHide={() => setShowUpload(false)}>
-        <UploadService 
-          user={user} 
-          serviceName="apikey"            
+      <Dialog
+        header="Upload Apikey Data"
+        visible={showUpload}
+        onHide={() => setShowUpload(false)}
+      >
+        <UploadService
+          user={user}
+          serviceName="apikey"
           onUploadComplete={() => {
             setShowUpload(false); // Close the dialog after upload
-          }}/>
+          }}
+        />
       </Dialog>
 
-      <Dialog header="Search Apikey" visible={searchDialog} onHide={() => setSearchDialog(false)}>
-      Search
-    </Dialog>
-    <Dialog
+      <Dialog
+        header="Search Apikey"
+        visible={searchDialog}
+        onHide={() => setSearchDialog(false)}
+      >
+        Search
+      </Dialog>
+      <Dialog
         header="Filter Users"
         visible={showFilter}
         onHide={() => setShowFilter(false)}
@@ -341,7 +437,7 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
             console.log(selectedFilterFields);
             onClickSaveFilteredfields(selectedFilterFields);
             setSelectedFilterFields(selectedFilterFields);
-            setShowFilter(false)
+            setShowFilter(false);
           }}
         ></Button>
       </Dialog>
@@ -371,12 +467,12 @@ const p_booleanTemplate5 = (rowData, { rowIndex }) => <p >{String(rowData.active
             console.log(selectedHideFields);
             onClickSaveHiddenfields(selectedHideFields);
             setSelectedHideFields(selectedHideFields);
-            setShowColumns(false)
+            setShowColumns(false);
           }}
         ></Button>
       </Dialog>
-        </>
-    );
+    </>
+  );
 };
 
 export default ApikeyDataTable;

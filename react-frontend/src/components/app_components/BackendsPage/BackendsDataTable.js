@@ -1,12 +1,12 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import React, { useState, useRef, useEffect} from 'react';
-import _ from 'lodash';
-import { Button } from 'primereact/button';
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import React, { useState, useRef, useEffect } from "react";
+import _ from "lodash";
+import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import UploadService from "../../../services/UploadService";
-import { InputText } from 'primereact/inputtext';
+import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import DownloadCSV from "../../../utils/DownloadCSV";
@@ -18,30 +18,66 @@ import DuplicateIcon from "../../../assets/media/Duplicate.png";
 import DeleteIcon from "../../../assets/media/Trash.png";
 import { Checkbox } from "primereact/checkbox";
 
-const BackendsDataTable = ({ items, fields, onEditRow, onRowDelete, onRowClick, searchDialog, setSearchDialog,   showUpload, setShowUpload,
-    showFilter, setShowFilter,
-    showColumns, setShowColumns, onClickSaveFilteredfields ,
-    selectedFilterFields, setSelectedFilterFields,
-    selectedHideFields, setSelectedHideFields, onClickSaveHiddenfields, loading, user,   selectedDelete,
-  setSelectedDelete, onCreateResult}) => {
-    const dt = useRef(null);
-    const urlParams = useParams();
-    const [globalFilter, setGlobalFilter] = useState('');
+const BackendsDataTable = ({
+  items,
+  fields,
+  onEditRow,
+  onRowDelete,
+  onRowClick,
+  searchDialog,
+  setSearchDialog,
+  showUpload,
+  setShowUpload,
+  showFilter,
+  setShowFilter,
+  showColumns,
+  setShowColumns,
+  onClickSaveFilteredfields,
+  selectedFilterFields,
+  setSelectedFilterFields,
+  selectedHideFields,
+  setSelectedHideFields,
+  onClickSaveHiddenfields,
+  loading,
+  user,
+  selectedDelete,
+  setSelectedDelete,
+  onCreateResult,
+}) => {
+  const dt = useRef(null);
+  const urlParams = useParams();
+  const [globalFilter, setGlobalFilter] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [data, setData] = useState([]);
 
-const pTemplate0 = (rowData, { rowIndex }) => <p >{rowData.projectName}</p>
-const p_numberTemplate1 = (rowData, { rowIndex }) => <p >{rowData.port}</p>
-const pTemplate2 = (rowData, { rowIndex }) => <p >{rowData.domain}</p>
-const pTemplate3 = (rowData, { rowIndex }) => <p >{rowData.env}</p>
-const dropdownTemplate4 = (rowData, { rowIndex }) => <p >{rowData.frontend?.projectName}</p>
-const dropdownTemplate5 = (rowData, { rowIndex }) => <p >{rowData.contract?.crm}</p>
-const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.dir}</p>
-    const editTemplate = (rowData, { rowIndex }) => <Button onClick={() => onEditRow(rowData, rowIndex)} icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`} className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`} />;
-    const deleteTemplate = (rowData, { rowIndex }) => <Button onClick={() => onRowDelete(rowData._id)} icon="pi pi-times" className="p-button-rounded p-button-danger p-button-text" />;
-    
-      const checkboxTemplate = (rowData) => (
+  const pTemplate0 = (rowData, { rowIndex }) => <p>{rowData.projectName}</p>;
+  const p_numberTemplate1 = (rowData, { rowIndex }) => <p>{rowData.port}</p>;
+  const pTemplate2 = (rowData, { rowIndex }) => <p>{rowData.domain}</p>;
+  const pTemplate3 = (rowData, { rowIndex }) => <p>{rowData.env}</p>;
+  const dropdownTemplate4 = (rowData, { rowIndex }) => (
+    <p>{rowData.frontend?.projectName}</p>
+  );
+  const dropdownTemplate5 = (rowData, { rowIndex }) => (
+    <p>{rowData.contract?.crm}</p>
+  );
+  const pTemplate6 = (rowData, { rowIndex }) => <p>{rowData.dir}</p>;
+  const editTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onEditRow(rowData, rowIndex)}
+      icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`}
+      className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`}
+    />
+  );
+  const deleteTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onRowDelete(rowData._id)}
+      icon="pi pi-times"
+      className="p-button-rounded p-button-danger p-button-text"
+    />
+  );
+
+  const checkboxTemplate = (rowData) => (
     <Checkbox
       checked={selectedItems.some((item) => item._id === rowData._id)}
       onChange={(e) => {
@@ -82,7 +118,7 @@ const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.dir}</p>
       console.error("Failed to delete selected records", error);
     }
   };
-    
+
   const handleMessage = () => {
     setShowDialog(true); // Open the dialog
   };
@@ -91,10 +127,10 @@ const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.dir}</p>
     setShowDialog(false); // Close the dialog
   };
 
-    return (
-        <>
-        <DataTable 
-           value={items}
+  return (
+    <>
+      <DataTable
+        value={items}
         ref={dt}
         removableSort
         onRowClick={onRowClick}
@@ -112,24 +148,76 @@ const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.dir}</p>
         selection={selectedItems}
         onSelectionChange={(e) => setSelectedItems(e.value)}
         onCreateResult={onCreateResult}
-        >
-                <Column
+      >
+        <Column
           selectionMode="multiple"
           headerStyle={{ width: "3rem" }}
           body={checkboxTemplate}
         />
-<Column field="projectName" header="projectName" body={pTemplate0} filter={selectedFilterFields.includes("projectName")} hidden={selectedHideFields?.includes("projectName")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="port" header="port" body={p_numberTemplate1} filter={selectedFilterFields.includes("port")} hidden={selectedHideFields?.includes("port")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="domain" header="domain" body={pTemplate2} filter={selectedFilterFields.includes("domain")} hidden={selectedHideFields?.includes("domain")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="env" header="env" body={pTemplate3} filter={selectedFilterFields.includes("env")} hidden={selectedHideFields?.includes("env")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="frontend" header="frontend" body={dropdownTemplate4} filter={selectedFilterFields.includes("frontend")} hidden={selectedHideFields?.includes("frontend")}  style={{ minWidth: "8rem" }} />
-<Column field="contract" header="Contract" body={dropdownTemplate5} filter={selectedFilterFields.includes("contract")} hidden={selectedHideFields?.includes("contract")}  style={{ minWidth: "8rem" }} />
-<Column field="dir" header="Dir" body={pTemplate6} filter={selectedFilterFields.includes("dir")} hidden={selectedHideFields?.includes("dir")}  sortable style={{ minWidth: "8rem" }} />
-            <Column header="Edit" body={editTemplate} />
-            <Column header="Delete" body={deleteTemplate} />
-            
-        </DataTable>
-
+        <Column
+          field="projectName"
+          header="projectName"
+          body={pTemplate0}
+          filter={selectedFilterFields.includes("projectName")}
+          hidden={selectedHideFields?.includes("projectName")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="port"
+          header="port"
+          body={p_numberTemplate1}
+          filter={selectedFilterFields.includes("port")}
+          hidden={selectedHideFields?.includes("port")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="domain"
+          header="domain"
+          body={pTemplate2}
+          filter={selectedFilterFields.includes("domain")}
+          hidden={selectedHideFields?.includes("domain")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="env"
+          header="env"
+          body={pTemplate3}
+          filter={selectedFilterFields.includes("env")}
+          hidden={selectedHideFields?.includes("env")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="frontend"
+          header="frontend"
+          body={dropdownTemplate4}
+          filter={selectedFilterFields.includes("frontend")}
+          hidden={selectedHideFields?.includes("frontend")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="contract"
+          header="Contract"
+          body={dropdownTemplate5}
+          filter={selectedFilterFields.includes("contract")}
+          hidden={selectedHideFields?.includes("contract")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="dir"
+          header="Dir"
+          body={pTemplate6}
+          filter={selectedFilterFields.includes("dir")}
+          hidden={selectedHideFields?.includes("dir")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column header="Edit" body={editTemplate} />
+        <Column header="Delete" body={deleteTemplate} />
+      </DataTable>
 
       {selectedItems.length > 0 ? (
         <div
@@ -305,20 +393,28 @@ const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.dir}</p>
         </div>
       ) : null}
 
-
-        <Dialog header="Upload Backends Data" visible={showUpload} onHide={() => setShowUpload(false)}>
-        <UploadService 
-          user={user} 
-          serviceName="backends"            
+      <Dialog
+        header="Upload Backends Data"
+        visible={showUpload}
+        onHide={() => setShowUpload(false)}
+      >
+        <UploadService
+          user={user}
+          serviceName="backends"
           onUploadComplete={() => {
             setShowUpload(false); // Close the dialog after upload
-          }}/>
+          }}
+        />
       </Dialog>
 
-      <Dialog header="Search Backends" visible={searchDialog} onHide={() => setSearchDialog(false)}>
-      Search
-    </Dialog>
-    <Dialog
+      <Dialog
+        header="Search Backends"
+        visible={searchDialog}
+        onHide={() => setSearchDialog(false)}
+      >
+        Search
+      </Dialog>
+      <Dialog
         header="Filter Users"
         visible={showFilter}
         onHide={() => setShowFilter(false)}
@@ -343,7 +439,7 @@ const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.dir}</p>
             console.log(selectedFilterFields);
             onClickSaveFilteredfields(selectedFilterFields);
             setSelectedFilterFields(selectedFilterFields);
-            setShowFilter(false)
+            setShowFilter(false);
           }}
         ></Button>
       </Dialog>
@@ -373,12 +469,12 @@ const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.dir}</p>
             console.log(selectedHideFields);
             onClickSaveHiddenfields(selectedHideFields);
             setSelectedHideFields(selectedHideFields);
-            setShowColumns(false)
+            setShowColumns(false);
           }}
         ></Button>
       </Dialog>
-        </>
-    );
+    </>
+  );
 };
 
 export default BackendsDataTable;

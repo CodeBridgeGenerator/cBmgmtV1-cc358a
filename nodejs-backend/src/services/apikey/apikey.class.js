@@ -1,5 +1,3 @@
 const { Service } = require("feathers-mongoose");
 
-exports.Apikey = class Apikey extends Service {
-  
-};
+exports.Apikey = class Apikey extends Service {};

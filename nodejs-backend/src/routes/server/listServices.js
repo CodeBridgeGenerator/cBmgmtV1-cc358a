@@ -1,15 +1,15 @@
 async function listServices(request, response) {
   const excludes = [
-    'audits',
-    'authentication',
-    'cache/clear/all',
-    'cache/clear/group',
-    'cache/clear/single',
-    'cache/clear/single',
-    'cache/flashdb',
-    'comments',
-    'chatai',
-    'config',
+    "audits",
+    "authentication",
+    "cache/clear/all",
+    "cache/clear/group",
+    "cache/clear/single",
+    "cache/clear/single",
+    "cache/flashdb",
+    "comments",
+    "chatai",
+    "config",
   ];
 
   try {
@@ -20,14 +20,14 @@ async function listServices(request, response) {
         .sort((a, b) => a.localeCompare(b));
       return response
         .status(200)
-        .json({ status: true, message: 'success', data });
+        .json({ status: true, message: "success", data });
     } else {
       return response
         .status(500)
-        .json({ status: false, message: 'data empty' });
+        .json({ status: false, message: "data empty" });
     }
   } catch (error) {
-    return response.status(500).json({ status: false, message: 'failure' });
+    return response.status(500).json({ status: false, message: "failure" });
   }
 }
 

@@ -11,7 +11,11 @@
         "entity": "user",
         "service": "users",
         "secret": "PAn+4iXx82p8+osL32xflfPpf/4=",
-        "authStrategies": ["jwt", "local"],
+        "authStrategies": [
+            "jwt",
+            "local",
+            "api-key"
+        ],
         "jwtOptions": {
             "header": {
                 "type": "access"

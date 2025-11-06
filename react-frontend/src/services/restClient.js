@@ -29,7 +29,7 @@ const shouldSkipAuthRedirect = () => {
   const currentPath = window.location.pathname;
   
   // Skip auth for these exact paths
-  const excludedPaths = ['/login', '/', '/signup', '/login-faq'];
+  const excludedPaths = ['/login', '/', '/signup', '/login-faq',"/land"];
   if (excludedPaths.includes(currentPath)) return true;
   
   // Skip auth for reset password URLs (both patterns)

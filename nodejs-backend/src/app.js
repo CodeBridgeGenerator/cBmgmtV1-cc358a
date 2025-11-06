@@ -9,6 +9,7 @@ const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
 const socketio = require("@feathersjs/socketio");
 
+const authentication = require("./authentication");
 const middleware = require("./middleware");
 const cbServices = require("./cbServices");
 const services = require("./services");
@@ -21,39 +22,40 @@ const recaptcha = require("./routes/recaptcha");
 const redis = require("./cbServices/redis");
 const server = require("./routes/server");
 const mongodb = require("./routes/mongodb");
-const authentication = require("./authentication");
+
 const mongoose = require("./mongoose");
 const setup = require("./setup");
 const redisCache = require("feathers-redis-cache");
 const redisClient = require("./cbServices/redis/config");
 const s3uploader = require("./routes/upload");
 const fcmService = require("./routes/fcm");
+const apiKeyConsumer = require("./routes/apiKeyConsumer");
 
 const app = express(feathers());
 // Load app socketio
 app.configure(
-    socketio((io) => {
-        io.on("connection", (socket) => {
-            console.debug(socket);
-        });
+  socketio((io) => {
+    io.on("connection", (socket) => {
+      console.debug(socket);
+    });
 
-        // Registering Socket.io middleware
-        io.use(function (socket, next) {
-            // Exposing a request property to services and hooks
-            socket.feathers.referrer = socket.request.referrer;
-            // console.debug(socket);
-            next();
-        });
-        io.sockets.setMaxListeners(555);
-    })
+    // Registering Socket.io middleware
+    io.use(function (socket, next) {
+      // Exposing a request property to services and hooks
+      socket.feathers.referrer = socket.request.referrer;
+      // console.debug(socket);
+      next();
+    });
+    io.sockets.setMaxListeners(555);
+  }),
 );
 // Load app configuration
 app.configure(configuration());
 // Enable security, CORS, compression, favicon and body parsing
 app.use(
-    helmet({
-        contentSecurityPolicy: false
-    })
+  helmet({
+    contentSecurityPolicy: false,
+  }),
 );
 app.use(cors());
 app.use(compress());
@@ -65,10 +67,14 @@ app.use("/loginreset/*", express.static(app.get("public")));
 app.use(favicon(path.join(app.get("public"), "favicon.ico")));
 // Set up Plugins and providers
 app.configure(express.rest());
+app.configure(authentication);
+console.log(
+  "Registered strategies:",
+  Object.keys(app.services["authentication"].strategies),
+);
 app.configure(mongoose);
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
-app.configure(authentication);
 app.configure(redisCache.client({ client: redisClient }));
 app.configure(redisCache.services({ pathPrefix: "/cache" }));
 // Set up our services (see `services/index.js`)
@@ -81,6 +87,7 @@ createWorker(app);
 // Configure a middleware for 404s and the error handler
 app.configure(genAi);
 app.configure(fcmService);
+app.configure(apiKeyConsumer);
 app.configure(s3uploader);
 app.configure(emailValidator);
 app.configure(recaptcha);

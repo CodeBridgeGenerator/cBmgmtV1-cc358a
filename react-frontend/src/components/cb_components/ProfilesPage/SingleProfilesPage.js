@@ -82,49 +82,49 @@ const SingleProfilesPage = (props) => {
             ? res.userId.map((elem) => ({ _id: elem._id, name: elem.name }))
             : res.userId
               ? [{ _id: res.userId._id, name: res.userId.name }]
-              : []
+              : [],
         );
         setDepartment(
           Array.isArray(res.department)
             ? res.department.map((elem) => ({ _id: elem._id, name: elem.name }))
             : res.department
               ? [{ _id: res.department._id, name: res.department.name }]
-              : []
+              : [],
         );
         setSection(
           Array.isArray(res.section)
             ? res.section.map((elem) => ({ _id: elem._id, name: elem.name }))
             : res.section
               ? [{ _id: res.section._id, name: res.section.name }]
-              : []
+              : [],
         );
         setPosition(
           Array.isArray(res.position)
             ? res.position.map((elem) => ({ _id: elem._id, name: elem.name }))
             : res.position
               ? [{ _id: res.position._id, name: res.position.name }]
-              : []
+              : [],
         );
         setManager(
           Array.isArray(res.manager)
             ? res.manager.map((elem) => ({ _id: elem._id, name: elem.name }))
             : res.manager
               ? [{ _id: res.manager._id, name: res.manager.name }]
-              : []
+              : [],
         );
         setCompany(
           Array.isArray(res.company)
             ? res.company.map((elem) => ({ _id: elem._id, name: elem.name }))
             : res.company
               ? [{ _id: res.company._id, name: res.company.name }]
-              : []
+              : [],
         );
         setBranch(
           Array.isArray(res.branch)
             ? res.branch.map((elem) => ({ _id: elem._id, name: elem.name }))
             : res.branch
               ? [{ _id: res.branch._id, name: res.branch.name }]
-              : []
+              : [],
         );
         setAddress(
           Array.isArray(res.address)
@@ -134,14 +134,14 @@ const SingleProfilesPage = (props) => {
               }))
             : res.address
               ? [{ _id: res.address._id, Street1: res.address.Street1 }]
-              : []
+              : [],
         );
         setPhone(
           Array.isArray(res.phone)
             ? res.phone.map((elem) => ({ _id: elem._id, number: elem.number }))
             : res.phone
               ? [{ _id: res.phone._id, number: res.phone.number }]
-              : []
+              : [],
         );
       })
       .catch((error) => {
@@ -555,7 +555,7 @@ const SingleProfilesPage = (props) => {
         id="rightsidebar"
         className={classNames(
           "overlay-auto z-1 surface-overlay shadow-2 absolute right-0 w-20rem animation-duration-150 animation-ease-in-out",
-          { hidden: !isHelpSidebarVisible }
+          { hidden: !isHelpSidebarVisible },
         )}
         style={{ top: "60px", height: "calc(100% - 60px)" }}
       >

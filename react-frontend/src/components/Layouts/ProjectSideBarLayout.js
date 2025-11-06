@@ -62,12 +62,11 @@ const ProjectSideBarLayout = (props) => {
               .get(profileResponse.company, {
                 query: { $select: ["companyType"] },
               });
-            
+
             if (companyResponse?.companyType) {
               setCompanyType(companyResponse.companyType);
             }
           }
-
         } else {
           console.warn("Position field not found in the profile data.");
         }

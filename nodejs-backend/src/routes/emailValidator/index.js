@@ -13,7 +13,7 @@ module.exports = function (app) {
 
   app.post(
     "/verify-email",
-    express.json({ type: "application/json" }), 
+    express.json({ type: "application/json" }),
     verifyEmail,
   );
 };

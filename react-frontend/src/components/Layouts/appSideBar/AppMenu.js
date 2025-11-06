@@ -39,6 +39,7 @@ const AppMenu = (props) => {
   };
 
   const renderSubMenu = useMemo(() => {
+    // eslint-disable-next-line react/display-name
     return (subMenuMenus, parentActive) => {
       return (
         <div

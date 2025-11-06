@@ -418,9 +418,9 @@ const LoginPage = (props) => {
               <h2 className="mb-4 text-2xl font-semibold">Check your email</h2>
               <p className="text-[14px]">
                 We&apos;ve sent you an email with instructions to reset your
-                password. Check your Junk/Span folder if it doesn&apos;t arrive. If
-                you still can&apos;t log in, click resend email or contact your
-                administrator.
+                password. Check your Junk/Span folder if it doesn&apos;t arrive.
+                If you still can&apos;t log in, click resend email or contact
+                your administrator.
               </p>
             </div>
             <div className="mt-6">

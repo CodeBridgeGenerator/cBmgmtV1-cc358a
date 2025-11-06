@@ -1,12 +1,16 @@
 const CryptoJS = require("crypto-js");
 
-const SECRET_KEY = "f2b26e374d8eabc937b6e7a92b8d5ff19a6732a5b2e8d4c1a1d8b6c9f3e7a2d1";
+const SECRET_KEY =
+  "f2b26e374d8eabc937b6e7a92b8d5ff19a6732a5b2e8d4c1a1d8b6c9f3e7a2d1";
 
 // Encrypt data
 function encryptData(data) {
   try {
     if (!data) throw new Error("No data provided for encryption");
-    const ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_KEY).toString();
+    const ciphertext = CryptoJS.AES.encrypt(
+      JSON.stringify(data),
+      SECRET_KEY,
+    ).toString();
     return ciphertext;
   } catch (error) {
     console.error("Encryption error:", error);
@@ -45,7 +49,7 @@ const decryptRequest = async (context) => {
   return context;
 };
 
-// FeathersJS Hook - Decrypt Response 
+// FeathersJS Hook - Decrypt Response
 const decryptResponse = async (context) => {
   if (context.result && context.result.encrypted) {
     context.result = decryptData(context.result.encrypted);
@@ -53,12 +57,10 @@ const decryptResponse = async (context) => {
   return context;
 };
 
-
-module.exports = { 
-  encryptData, 
-  decryptData, 
-  encryptResponse, 
+module.exports = {
+  encryptData,
+  decryptData,
+  encryptResponse,
   decryptRequest,
   decryptResponse,
-
 };

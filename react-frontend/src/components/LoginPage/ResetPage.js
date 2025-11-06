@@ -104,7 +104,6 @@ const ResetPage = (props) => {
             message: error.message || "Failed to reset password.",
           });
         });
-
     }
   };
 
