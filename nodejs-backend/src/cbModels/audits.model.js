@@ -12,6 +12,7 @@ module.exports = function (app) {
       updatedBy: { type: String },
     },
     {
+      embeddings:{ type: [Number]},
       timestamps: true,
     },
   );

@@ -82,13 +82,27 @@ const AppSideBar = (props) => {
             </div>
             <AppMenu
               icon={<Home />}
+              label="MongoDb"
+              menuKey="mongodb"
+              
+              menus={[
+                {
+                  icon: <Home />,
+                  label: "Projects",
+                  menuKey: "mongoProjects",
+                  to: "/mongo/groups",
+                }
+              ]}
+            />
+            <AppMenu
+              icon={<Home />}
               label="My app"
               menuKey="dashboard"
               to="/dashboard"
               menus={[
                 {
                   icon: <Home />,
-                  label: "Crm",
+                  label: "CRM",
                   menuKey: "crm",
                   to: "/crm",
                 },

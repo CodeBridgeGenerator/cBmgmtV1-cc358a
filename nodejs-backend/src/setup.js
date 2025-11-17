@@ -10,11 +10,11 @@ const { decryptData } = require("./utils/encryption");
 module.exports = async (app) => {
   initializeSuperUser(app);
   insertRefData(app);
-  const result = await app.service("authentication").create({
-    strategy: "api-key",
-    apiKey: "api_2cbdce5558887012fe56db73f83cb321tenant_id",
-  });
-  console.log(result);
+  // const result = await app.service("authentication").create({
+  //   strategy: "api-key",
+  //   apiKey: "api_2cbdce5558887012fe56db73f83cb321tenant_id",
+  // });
+  // console.log(result);
   console.debug("Setup completed.");
 };
 

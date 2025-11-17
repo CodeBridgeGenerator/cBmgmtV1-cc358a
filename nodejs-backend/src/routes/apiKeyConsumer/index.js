@@ -1,5 +1,5 @@
 const express = require("@feathersjs/express");
-const { getAccessToken, getData } = require("./apiKeyConsumer");
+const { getData, setData } = require("./apiKeyConsumer");
 
 function attachApp(app) {
   return (req, res, next) => {
@@ -11,15 +11,14 @@ function attachApp(app) {
 module.exports = function (app) {
   app.use(attachApp(app));
 
-  app.get(
-    "/consumer/apiKey",
-    express.json({ type: "application/json" }),
-    getAccessToken,
-  );
-
   app.post(
-    "/consumer/query",
+    "/consumer/read",
     express.json({ type: "application/json" }),
     getData,
+  );
+  app.post(
+    "/consumer/cupd",
+    express.json({ type: "application/json" }),
+    setData,
   );
 };

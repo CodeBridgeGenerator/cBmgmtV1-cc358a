@@ -1,3 +1,6 @@
+const AtlasService = require("../../utils/AtlasMongo/AtlasService");
+const atlasService = new AtlasService();
+
 async function distinct(request, response) {
   const mongooseClient = request.appInstance.get("mongooseClient");
   const collection = request.body.collection;
@@ -88,11 +91,22 @@ async function deleteMany(request, response) {
 }
 
 // dump
-// restore
+//
+
+async function getProjects(req, res) {
+  try {
+    const results = await atlasService.handleRequest("api","getProjects",req.body);
+    return res.status(200).json(results);
+  } catch (err) {
+    // atlasService.on("")
+    return res.status(500).json({ message: "failed" });
+  }
+}
 
 module.exports = {
   distinct,
   drop,
   updateMany,
   deleteMany,
+  getProjects
 };

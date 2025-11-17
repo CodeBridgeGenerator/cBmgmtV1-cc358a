@@ -1,5 +1,5 @@
 const express = require("@feathersjs/express");
-const { distinct, drop, updateMany, deleteMany } = require("./mongoDb");
+const { distinct, drop, updateMany, deleteMany, getProjects } = require("./mongoDb");
 
 function attachApp(app) {
   return (req, res, next) => {
@@ -9,6 +9,7 @@ function attachApp(app) {
 }
 
 module.exports = function (app) {
+  
   app.use(attachApp(app));
   app.post(
     "/mongodb/distinct",
@@ -25,5 +26,10 @@ module.exports = function (app) {
     "/mongodb/deleteMany",
     express.raw({ type: "application/json" }),
     deleteMany,
+  );
+
+  app.get("/mongodb/groups",
+    express.raw({ type: "application/json" }),
+    getProjects,
   );
 };

@@ -93,13 +93,15 @@ import AuditProjectLayoutPage from "../components/cb_components/AuditsPage/Audit
 import CBRouter from "./CBRouter";
 import AppRouter from "./AppRouter";
 import LandingPage from "../components/app_components/LandingPage/LandingPage";
+import MongoDBRouter from "./MongoDBRouter";
+import ProjectsPage from "../components/atlas_components/ProjectsPage";
 
 //  ~cb-add-import~
 
 const MyRouter = (props) => {
   return (
     <Routes>
-              <Route path="/land" exact element={<LandingPage />} />
+      <Route path="/land" exact element={<LandingPage />} />
       <Route
         path="/"
         exact
@@ -142,6 +144,7 @@ const MyRouter = (props) => {
       <Route path="/login-faq" exact element={<LoginFaqPage />} />
 
       <Route element={<ProtectedRoute redirectPath={"/login"} />}>
+        <Route path="/mongo/groups" exact element={<ProjectsPage />} />
         <Route path="/project" exact element={<DashboardWelcome />} />
         {/* user details */}
         <Route path="/account" exact element={<Account />} />

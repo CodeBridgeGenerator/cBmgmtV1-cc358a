@@ -20,7 +20,7 @@ class ApiKeyStrategy extends AuthenticationBaseStrategy {
     });
 
     if (!data.length) {
-      console.log("no api key");
+      console.log("invalid api key");
       throw new Error("Invalid API key");
     }
 

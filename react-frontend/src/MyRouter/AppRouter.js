@@ -1,7 +1,7 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { connect } from 'react-redux';
-import ProtectedRoute from './ProtectedRoute';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { connect } from "react-redux";
+import ProtectedRoute from "./ProtectedRoute";
 
 import SingleCrmPage from "../components/app_components/CrmPage/SingleCrmPage";
 import CrmProjectLayoutPage from "../components/app_components/CrmPage/CrmProjectLayoutPage";
@@ -20,36 +20,68 @@ import FirebaseProjectLayoutPage from "../components/app_components/FirebasePage
 //  ~cb-add-import~
 
 const AppRouter = () => {
-    return (
-        <Routes>
-            {/* ~cb-add-unprotected-route~ */}
-            <Route element={<ProtectedRoute redirectPath={'/login'} />}>
-<Route path="/crm/:singleCrmId" exact element={<SingleCrmPage />} />
-<Route path="/crm" exact element={<CrmProjectLayoutPage />} />
-<Route path="/opportunity/:singleOpportunityId" exact element={<SingleOpportunityPage />} />
-<Route path="/opportunity" exact element={<OpportunityProjectLayoutPage />} />
-<Route path="/contract/:singleContractId" exact element={<SingleContractPage />} />
-<Route path="/contract" exact element={<ContractProjectLayoutPage />} />
-<Route path="/apikey/:singleApikeyId" exact element={<SingleApikeyPage />} />
-<Route path="/apikey" exact element={<ApikeyProjectLayoutPage />} />
-<Route path="/backends/:singleBackendsId" exact element={<SingleBackendsPage />} />
-<Route path="/backends" exact element={<BackendProjectLayoutPage />} />
-<Route path="/frontends/:singleFrontendsId" exact element={<SingleFrontendsPage />} />
-<Route path="/frontends" exact element={<FrontendProjectLayoutPage />} />
-<Route path="/firebase/:singleFirebaseId" exact element={<SingleFirebasePage />} />
-<Route path="/firebase" exact element={<FirebaseProjectLayoutPage />} />
-                {/* ~cb-add-protected-route~ */}
-            </Route>
-        </Routes>
-    );
-}
+  return (
+    <Routes>
+      {/* ~cb-add-unprotected-route~ */}
+      <Route element={<ProtectedRoute redirectPath={"/login"} />}>
+        <Route path="/crm/:singleCrmId" exact element={<SingleCrmPage />} />
+        <Route path="/crm" exact element={<CrmProjectLayoutPage />} />
+        <Route
+          path="/opportunity/:singleOpportunityId"
+          exact
+          element={<SingleOpportunityPage />}
+        />
+        <Route
+          path="/opportunity"
+          exact
+          element={<OpportunityProjectLayoutPage />}
+        />
+        <Route
+          path="/contract/:singleContractId"
+          exact
+          element={<SingleContractPage />}
+        />
+        <Route path="/contract" exact element={<ContractProjectLayoutPage />} />
+        <Route
+          path="/apikey/:singleApikeyId"
+          exact
+          element={<SingleApikeyPage />}
+        />
+        <Route path="/apikey" exact element={<ApikeyProjectLayoutPage />} />
+        <Route
+          path="/backends/:singleBackendsId"
+          exact
+          element={<SingleBackendsPage />}
+        />
+        <Route path="/backends" exact element={<BackendProjectLayoutPage />} />
+        <Route
+          path="/frontends/:singleFrontendsId"
+          exact
+          element={<SingleFrontendsPage />}
+        />
+        <Route
+          path="/frontends"
+          exact
+          element={<FrontendProjectLayoutPage />}
+        />
+        <Route
+          path="/firebase/:singleFirebaseId"
+          exact
+          element={<SingleFirebasePage />}
+        />
+        <Route path="/firebase" exact element={<FirebaseProjectLayoutPage />} />
+        {/* ~cb-add-protected-route~ */}
+      </Route>
+    </Routes>
+  );
+};
 
 const mapState = (state) => {
-    const { isLoggedIn } = state.auth;
-    return { isLoggedIn };
+  const { isLoggedIn } = state.auth;
+  return { isLoggedIn };
 };
 const mapDispatch = (dispatch) => ({
-    alert: (data) => dispatch.toast.alert(data)
+  alert: (data) => dispatch.toast.alert(data),
 });
 
 export default connect(mapState, mapDispatch)(AppRouter);
