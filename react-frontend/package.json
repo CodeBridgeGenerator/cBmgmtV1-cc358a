@@ -54,7 +54,7 @@
 		"moveCMD": "if exist .env_example rename .env_example .env",
 		"movePS": "if Test-Path -Path .env_example 'Rename-Item -Path .\\.env_example .\\.env'",
 		"build:stg": "set \"GENERATE_SOURCEMAP=false\" && set \"DISABLE_ESLINT_PLUGIN=true\" && env-cmd -f .env_stg react-scripts build",
-		"build:prod": "set \"GENERATE_SOURCEMAP=false\" && env-cmd -f .env_prd react-scripts build",
+		"build:prd": "set \"GENERATE_SOURCEMAP=false\" && env-cmd -f .env_prd react-scripts build",
 		"deploy" : "firebase deploy",
 		"bnd:stg" : "npm run build:stg && npm run deploy",
 		"welcome": "\"echo \"Welcome to Code Bridge Ai Code Generator\" \"",
