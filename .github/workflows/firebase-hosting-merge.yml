@@ -27,5 +27,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CBM_STG }}
           channelId: live
           projectId: cbm-stg
-          working-directory: ./react-frontend
+          entryPoint: ./react-frontend
 
