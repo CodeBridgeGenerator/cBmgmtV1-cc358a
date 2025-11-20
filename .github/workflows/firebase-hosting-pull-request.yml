@@ -20,11 +20,13 @@ jobs:
         working-directory: ./react-frontend
 
       - name: Build staging bundle
-        run: npm run build:stg
+        run: npm run build
         working-directory: ./react-frontend
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CBM_STG }}
-          projectId: cbm-stg
+      - name: Firebase deploy
+        run: |
+          firebase hosting:channel:deploy preview --project cbm-stg
+        working-directory: ./react-frontend
+        env:
+          FIREBASE_SERVICE_ACCOUNT_CBM_STG: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CBM_STG }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
