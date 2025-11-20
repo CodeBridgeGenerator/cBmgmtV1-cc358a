@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import FloatingButton from "./FloatingButton";
 import { connect } from "react-redux";

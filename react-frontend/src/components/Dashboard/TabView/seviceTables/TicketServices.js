@@ -1,4 +1,5 @@
-// import React from "react";
+// /* eslint-disable no-console */
+import React from "react";
 // import { TabView, TabPanel } from "primereact/tabview";
 // import { connect } from "react-redux";
 // import AtlasTicketsPage from "../../../app_components/AtlasTicketsPage/AtlasTicketsPage";

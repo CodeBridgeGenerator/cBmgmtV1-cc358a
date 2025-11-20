@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable no-console */
 import React from "react";
 import { connect } from "react-redux";
 

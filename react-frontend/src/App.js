@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Provider, connect } from "react-redux"; // Import connect

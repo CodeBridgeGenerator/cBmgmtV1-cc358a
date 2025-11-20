@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import ProjectLayout from "../../Layouts/ProjectLayout";
 import { connect } from "react-redux";

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";

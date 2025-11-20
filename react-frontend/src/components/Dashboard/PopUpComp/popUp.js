@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { classNames } from "primereact/utils";
 import Trash from "../../../assets/media/Trash.png";

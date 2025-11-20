@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
