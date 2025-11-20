@@ -7,13 +7,22 @@ permissions:
   checks: write
   contents: read
   pull-requests: write
+
 jobs:
   build_and_preview:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: cd /home/runner/work/cBmgmtV1-cc358a/react-frontend && npm run bnd:stg
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./react-frontend
+
+      - name: Build staging bundle
+        run: npm run bnd:stg
+        working-directory: ./react-frontend
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
