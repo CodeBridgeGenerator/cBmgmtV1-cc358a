@@ -5,7 +5,7 @@ import PinnedItems from "./RecentFavDashComp/FavComponent";
 import TotalComponent from "./RecentFavDashComp/TotalComponent";
 import LineChart from "./Charts/LineChart/MyAppLineChart";
 import CompanyBarChart from "./Charts/BarChart/MyAppBarChart";
-import AdminServices from "./TabView/seviceTables/TicketServices";
+import AdminServices from "./TabView/seviceTables/AdminServices";
 import ChartPopup from "./PopUpComp/ChartPopup";
 import ProjectLayout from "../Layouts/ProjectLayout";
 import client from "../../services/restClient";

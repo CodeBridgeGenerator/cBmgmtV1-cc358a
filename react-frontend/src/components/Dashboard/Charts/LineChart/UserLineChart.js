@@ -9,7 +9,6 @@ export default function LoginHistoryLineChart(props) {
   const [loading, setLoading] = useState(false);
   const { name, isEdit } = props;
   const [totalCompanies, setTotalCompanies] = useState(0);
-  const [totalProfiles, setTotalProfiles] = useState(0);
 
   useEffect(() => {
     setLoading(true);
