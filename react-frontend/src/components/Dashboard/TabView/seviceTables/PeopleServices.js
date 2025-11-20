@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { TabView, TabPanel } from "primereact/tabview";

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useState, useRef, useEffect } from "react";

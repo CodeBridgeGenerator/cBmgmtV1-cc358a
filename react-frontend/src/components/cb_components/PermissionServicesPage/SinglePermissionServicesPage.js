@@ -1,4 +1,5 @@
 import { Button } from "primereact/button";
+/* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";

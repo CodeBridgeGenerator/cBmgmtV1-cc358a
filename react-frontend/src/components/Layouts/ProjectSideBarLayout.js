@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
 import AppSideBar from "./appSideBar/AppSideBar.js";
 import { connect } from "react-redux";
