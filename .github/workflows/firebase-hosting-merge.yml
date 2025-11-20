@@ -18,7 +18,7 @@ jobs:
         working-directory: ./react-frontend
 
       - name: Build staging bundle
-        run: npm run bnd:stg
+        run: npm run build
         working-directory: ./react-frontend
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
