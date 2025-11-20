@@ -10,8 +10,3 @@ package-lock.json
 
 # environments
 .env
-.env_prd
-.env_sit
-.env_stg
-.env_test
-.env_uat
