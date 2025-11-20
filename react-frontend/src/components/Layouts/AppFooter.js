@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import React from "react";
 import FloatingButton from "./FloatingButton";
+import { Tag } from "primereact/tag";
 import { connect } from "react-redux";
 
 const AppFooter = (props) => {
@@ -13,6 +14,14 @@ const AppFooter = (props) => {
         <div className="flex items-center ml-2">
           <FloatingButton />
         </div>
+      ) : process.env.REACT_APP_ENV !== "prd" ? (
+        <Tag
+          className="mr-2"
+          icon="pi pi-check"
+          value={process.env.REACT_APP_ENV}
+          severity="warning"
+          rounded
+        ></Tag>
       ) : null}
     </footer>
   );
