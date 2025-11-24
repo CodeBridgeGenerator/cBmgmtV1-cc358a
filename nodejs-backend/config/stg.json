@@ -1,0 +1,47 @@
+{
+    "host": "localhost",
+    "port": 3030,
+    "public": "../public/",
+    "paginate": {
+        "default": 1000,
+        "max": 100000
+    },
+    "mongodb": "mongodb://localhost:27017/cBmgmtV1",
+    "authentication": {
+        "entity": "user",
+        "service": "users",
+        "secret": "uuZngrRf18QWSM9eH4aulhD5RE4=",
+        "authStrategies": ["jwt", "local"],
+        "jwtOptions": {
+            "header": {
+                "type": "access"
+            },
+            "audience": "http://localhost",
+            "issuer": "feathers",
+            "algorithm": "HS256",
+            "expiresIn": "1d"
+        },
+        "local": {
+            "usernameField": "email",
+            "passwordField": "password"
+        },
+        "oauth": {
+            "redirect": "/",
+            "auth0": {
+                "key": "<auth0 oauth key>",
+                "secret": "<auth0 oauth secret>",
+                "subdomain": "<auth0 subdomain>",
+                "scope": ["profile", "openid", "email"]
+            }
+        }
+    },
+    "redis": {
+        "host": "localhost",
+        "port": 6379
+    },
+    "isDev" : false,
+    "isPrd" : false,
+    "isStg" : true,
+    "isUat" : false,
+    "isSit" : false
+}
