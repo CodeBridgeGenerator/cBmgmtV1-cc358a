@@ -7,6 +7,12 @@
         "max": 100000
     },
     "mongodb": "mongodb://localhost:27017/cBmgmtV1",
+        "apiAccess": {
+        "apiKey": "api_2cbdce5558887012fe56db73f83cb321tenant_id",
+        "endPoint": "http://localhost:3030",
+        "userAccount" : "kana@cloudbasha.com",
+        "isService" : false
+    },
     "authentication": {
         "entity": "user",
         "service": "users",

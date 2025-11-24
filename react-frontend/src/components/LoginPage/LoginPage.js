@@ -320,6 +320,7 @@ const LoginPage = (props) => {
                 >
                   Forgot your password?
                 </p>
+                <Link to="/mongoDB">Go Mongo</Link>
               </div>
             </div>
             <div className="mt-7">

@@ -47,6 +47,66 @@ import Errors from '../../../assets/icons/Errors.js';
 // ~cb-add-import~
 
 const AppSideBar = (props) => {
+  const { activeKey: initialActiveKey, activeDropdown: initialActiveDropdown } =
+    props;
+  const [activeKey, setActiveKey] = useState(initialActiveKey);
+  const [activeDropdown, setActiveDropdown] = useState(initialActiveDropdown);
+  const [open, setOpen] = useState(true);
+  return (
+    <>
+      <div
+        className={classNames(
+          "duration-300 flex-shrink-0",
+          open ? "w-[280px]" : "w-[calc(3rem+20px)]",
+        )}
+      ></div>
+      <AppSideBarProvider
+        activeKey={activeKey}
+        setActiveKey={setActiveKey}
+        open={open}
+        setOpen={setOpen}
+        activeDropdown={activeDropdown}
+        setActiveDropdown={setActiveDropdown}
+      >
+        <div
+          className={classNames(
+            "fixed z-[100] flex flex-col top-20 left-0 h-[calc(100vh-5rem)] overflow-y-hidden overflow-x-hidden  flex-shrink-0 shadow bg-[#F8F9FA] border-r border-[#DEE2E6] border-solid duration-300",
+            open ? "w-[280px]" : "w-[calc(3rem+20px)]",
+          )}
+        >
+          <div className="flex-grow gap-1 p-2 overflow-x-hidden overflow-y-auto no-scrollbar">
+            <div className="flex gap-3 px-3 py-[10px]">
+              <span className="cursor-pointer" onClick={() => setOpen(!open)}>
+                <Toggle />
+              </span>
+            </div>
+            <AppMenu
+              icon={<Home />}
+              label="MongoDb"
+              menuKey="mongodb"
+              
+              menus={[
+                                {
+                  icon: <Home />,
+                  label: "List Tiers",
+                  menuKey: "mongoTiers",
+                  to: "/mongo/tiers",
+                },
+                {
+                  icon: <Home />,
+                  label: "Projects",
+                  menuKey: "mongoProjects",
+                  to: "/mongo/groups",
+                }
+              ]}
+            />
+            <AppMenu
+              icon={<Home />}
+              label="My app"
+              menuKey="dashboard"
+              to="/dashboard"
+              menus={[
+                {
     const { activeKey: initialActiveKey, activeDropdown: initialActiveDropdown } = props;
     const [activeKey, setActiveKey] = useState(initialActiveKey);
     const [activeDropdown, setActiveDropdown] = useState(initialActiveDropdown);
