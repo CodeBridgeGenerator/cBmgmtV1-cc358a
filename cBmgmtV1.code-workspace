@@ -1,1 +1,11 @@
-{"folders":[{"path":"nodejs-backend"},{"path":"react-frontend"}],"settings":{}}
+{"folders":[
+        {
+            "path": "nodejs-backend"
+        },
+        {
+            "path": "react-frontend"
+        },
+        {
+            "path": ".github"
+        }
+    ],"settings":{}}
