@@ -12,27 +12,19 @@ module.exports = function (app) {
         trim: true,
         comment: "Name, p, false, true, true, true, true, true, true, , , , ,",
       },
-      companyTypecompanyType: {
+      companyType: {
         type: String,
-        // required: true,
-        maxLength: 1000000,
-        // index: true,
-        trim: true,
         comment:
           "Company Type, p, false, true, true, true, true, true, true, , , , ,",
       },
       companyNo: {
         type: String,
-        required: true,
-        minLength: 3,
-        maxLength: 1000000,
-        index: true,
-        trim: true,
         comment:
           "Company no, p, false, true, true, true, true, true, true, , , , ,",
       },
 
       newCompanyNumber: {
+        type: String,
         comment:
           "New company number, p_number, false, true, true, true, true, true, true, , , , ,",
       },

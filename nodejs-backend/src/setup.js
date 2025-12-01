@@ -26,7 +26,7 @@ module.exports = (app) => {
 // }
 
 const initializeSuperUser = async (app) => {
-  const userEmail = ["kana@cloudbasha.com"];
+  const userEmail = ["kana@codebridge.my"];
   try {
     let getUserEmail = await app.service("userInvites").find({
       query: {
@@ -48,6 +48,7 @@ const initializeSuperUser = async (app) => {
           status: false,
           sendMailCounter: 0,
           code: codeGen(),
+          role: "67435a2c6521f76d8ac46f33"
         })),
       );
       // console.debug(`Created userInvites for: ${userEmail.join(", ")}`);

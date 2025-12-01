@@ -15,7 +15,7 @@ const createFCMQueWorker = (app) => {
       // write code here
       try {
         const result = await sendFCM(job.data.payload);
-        if (!result.isSuccess) throw Error(`Fcm error.`);
+        if (!result.isSuccess) throw Error("Fcm error.");
       } catch (error) {
         console.error(error);
       }

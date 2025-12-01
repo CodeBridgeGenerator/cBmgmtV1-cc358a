@@ -1,0 +1,72 @@
+[debug] [2025-11-25T06:01:17.828Z] ----------------------------------------------------------------------
+[debug] [2025-11-25T06:01:17.836Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2025-11-25T06:01:17.836Z] CLI Version:   14.24.2
+[debug] [2025-11-25T06:01:17.837Z] Platform:      win32
+[debug] [2025-11-25T06:01:17.837Z] Node Version:  v21.4.0
+[debug] [2025-11-25T06:01:17.838Z] Time:          Tue Nov 25 2025 14:01:17 GMT+0800 (Malaysia Time)
+[debug] [2025-11-25T06:01:17.839Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\User\Projects\CodeBridgeStudioProjects\cBmgmtV1-cc358a\react-frontend
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2025-11-25T06:01:27.633Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T06:01:27.634Z] > authorizing via signed-in user (admin@cloudbasha.com)
+[debug] [2025-11-25T06:01:27.636Z] Checked if tokens are valid: false, expires at: 1764043732983
+[debug] [2025-11-25T06:01:27.636Z] Checked if tokens are valid: false, expires at: 1764043732983
+[debug] [2025-11-25T06:01:27.637Z] > refreshing access token with scopes: []
+[debug] [2025-11-25T06:01:27.645Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-11-25T06:01:27.645Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-25T06:01:28.051Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-11-25T06:01:28.052Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-25T06:01:28.067Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/cbm-stg [none]
+[debug] [2025-11-25T06:01:28.761Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/cbm-stg 200
+[debug] [2025-11-25T06:01:28.762Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/cbm-stg {"projectId":"cbm-stg","projectNumber":"538001777517","displayName":"CBm-stg","name":"projects/cbm-stg","resources":{"hostingSite":"cbm-stg"},"state":"ACTIVE","etag":"1_8c5b8f0f-10e9-4495-a4ce-dbe433849ef1"}
+[info] i  Using project cbm-stg (CBm-stg) . 
+[info] 
+=== Hosting Setup
+[debug] [2025-11-25T06:01:28.780Z] Checked if tokens are valid: true, expires at: 1764054087052
+[debug] [2025-11-25T06:01:28.781Z] Checked if tokens are valid: true, expires at: 1764054087052
+[debug] [2025-11-25T06:01:28.781Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/cbm-stg [none]
+[debug] [2025-11-25T06:01:29.986Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/cbm-stg 200
+[debug] [2025-11-25T06:01:29.986Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/cbm-stg {"projectId":"cbm-stg","projectNumber":"538001777517","displayName":"CBm-stg","name":"projects/cbm-stg","resources":{"hostingSite":"cbm-stg"},"state":"ACTIVE","etag":"1_8c5b8f0f-10e9-4495-a4ce-dbe433849ef1"}
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 
+[info] 
+[info] i  Detected a .git folder at C:\Users\User\Projects\CodeBridgeStudioProjects\cBmgmtV1-cc358a 
+[info] i  Authorizing with GitHub to upload your service account to a GitHub repository's secrets store. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://github.com/login/oauth/authorize?client_id=89cf50f02ac6aaed3484&state=548496979&redirect_uri=http%3A%2F%2Flocalhost%3A9005&scope=read%3Auser%20repo%20public_repo
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-11-25T06:04:27.870Z] >>> [apiv2][query] POST https://github.com/login/oauth/access_token [none]
+[debug] [2025-11-25T06:04:27.870Z] >>> [apiv2][body] POST https://github.com/login/oauth/access_token [stream]
+[debug] [2025-11-25T06:04:28.373Z] <<< [apiv2][status] POST https://github.com/login/oauth/access_token 200
+[debug] [2025-11-25T06:04:28.373Z] <<< [apiv2][body] POST https://github.com/login/oauth/access_token {"access_token":"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","token_type":"bearer","scope":"read:user,repo"}
+[debug] [2025-11-25T06:04:28.388Z] >>> [apiv2][query] GET https://api.github.com/user [none]
+[debug] [2025-11-25T06:04:29.082Z] <<< [apiv2][status] GET https://api.github.com/user 200
+[debug] [2025-11-25T06:04:29.082Z] <<< [apiv2][body] GET https://api.github.com/user {"login":"CodeBridgeGenerator","id":150019363,"node_id":"U_kgDOCPEdIw","avatar_url":"https://avatars.githubusercontent.com/u/150019363?v=4","gravatar_id":"","url":"https://api.github.com/users/CodeBridgeGenerator","html_url":"https://github.com/CodeBridgeGenerator","followers_url":"https://api.github.com/users/CodeBridgeGenerator/followers","following_url":"https://api.github.com/users/CodeBridgeGenerator/following{/other_user}","gists_url":"https://api.github.com/users/CodeBridgeGenerator/gists{/gist_id}","starred_url":"https://api.github.com/users/CodeBridgeGenerator/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/CodeBridgeGenerator/subscriptions","organizations_url":"https://api.github.com/users/CodeBridgeGenerator/orgs","repos_url":"https://api.github.com/users/CodeBridgeGenerator/repos","events_url":"https://api.github.com/users/CodeBridgeGenerator/events{/privacy}","received_events_url":"https://api.github.com/users/CodeBridgeGenerator/received_events","type":"User","user_view_type":"private","site_admin":false,"name":"Code Bridge Generator","company":"Code Bridge Sdn Bhd","blog":"www.codebridge.my","location":"Petaling Jaya, Selangor, Malaysia","email":null,"hireable":null,"bio":"Build applications faster than ever\r\n\r\nFrom mobile to data science app in minutes🚀\r\nGot an idea? Just build it.💥\r\nGenerate 78% of code in under 4 minutes.\r\nBu","twitter_username":null,"notification_email":null,"public_repos":619,"public_gists":0,"followers":0,"following":0,"created_at":"2023-11-06T10:40:44Z","updated_at":"2025-11-25T01:20:57Z","private_gists":0,"total_private_repos":14,"owned_private_repos":14,"disk_usage":3040957,"collaborators":7,"two_factor_authentication":false,"plan":{"name":"free","space":976562499,"collaborators":0,"private_repos":10000}}
+[info] 
+[info] +  Success! Logged into GitHub as CodeBridgeGenerator 
+[info] 

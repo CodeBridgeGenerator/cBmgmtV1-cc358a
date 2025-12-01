@@ -1,8 +1,8 @@
 const IORedis = require("ioredis");
 const redisClient = new IORedis({
   maxRetriesPerRequest: null,
-  //   host: null,
-  //   port: null,
+  host: "redis",
+  port: 6379,
   //   password: null,
   //   tls: {
   //   ca: fs.readFileSync('LOCAL/PATH/TO/rackspace-ca-2016.pem')
@@ -14,7 +14,7 @@ redisClient.on("connect", () => {
 });
 
 redisClient.on("error", (err) => {
-  console.error("Redis connection error:", err);
+  console.error("Redis connection error:", err.message);
 });
 
 module.exports = redisClient;

@@ -139,7 +139,6 @@ const MyRouter = (props) => {
             <Route path="/login-faq" exact element={<LoginFaqPage />} />
 
       <Route element={<ProtectedRoute redirectPath={"/login"} />}>
-        <Route path="/mongo/groups" exact element={<ProjectsPage />} />
         <Route path="/project" exact element={<DashboardWelcome />} />
         {/* user details */}
         <Route path="/account" exact element={<Account />} />

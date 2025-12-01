@@ -4,6 +4,11 @@ FROM node:22-slim
 # Setting Working Directory
 WORKDIR /usr/app
 
+RUN apt-get update && \
+    apt-get install -y iputils-ping redis-tools && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Copying only package.json
 COPY package*.json ./
 
