@@ -54,9 +54,8 @@
 		"moveCMD": "if exist .env_example rename .env_example .env",
 		"movePS": "if Test-Path -Path .env_example 'Rename-Item -Path .\\.env_example .\\.env'",
 		"build:sit": "set \"GENERATE_SOURCEMAP=false\" && env-cmd -f .env_sit react-scripts build",
-		"build:stg": "set \"GENERATE_SOURCEMAP=false\" && set \"DISABLE_ESLINT_PLUGIN=true\" && env-cmd -f .env_stg react-scripts build",
-		"build:test": "set \"GENERATE_SOURCEMAP=false\" && env-cmd -f .env_test react-scripts build",
-		"build:prod": "set \"GENERATE_SOURCEMAP=false\" && env-cmd -f .env_prd react-scripts build",
+		"build:stg": "set \"GENERATE_SOURCEMAP=false\" && set \"DISABLE_ESLINT_PLUGIN=true\" && env-cmd -f ../env_files/frontend/.env_stg react-scripts build",
+		"build:prod": "set \"GENERATE_SOURCEMAP=false\" && env-cmd -f ../env_files/frontend/.env_prd react-scripts build",
 		"welcome": "\"echo \"Welcome to Code Bridge Ai Code Generator\" \"",
 		"launch:mac": "npm i && npm run format && npm run start",
 		"launch": "npm run --silent cmd && npm install --quiet --no-progress && npm run welcome && npm run format && npm run start"
