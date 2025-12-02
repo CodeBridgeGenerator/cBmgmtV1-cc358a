@@ -7,17 +7,20 @@
         "max": 100000
     },
     "mongodb": "mongodb://localhost:27017/cBmgmtV1",
-        "apiAccess": {
+    "apiAccess": {
         "apiKey": "api_2cbdce5558887012fe56db73f83cb321tenant_id",
         "endPoint": "http://localhost:3030",
-        "userAccount" : "kana@cloudbasha.com",
-        "isService" : false
+        "userAccount": "kana@cloudbasha.com",
+        "isService": false
     },
     "authentication": {
         "entity": "user",
         "service": "users",
         "secret": "QTtVD0MSAmox5cyT92gKq5NiGrI=",
-        "authStrategies": ["jwt", "local"],
+        "authStrategies": [
+            "jwt",
+            "local"
+        ],
         "jwtOptions": {
             "header": {
                 "type": "access"
@@ -37,7 +40,11 @@
                 "key": "<auth0 oauth key>",
                 "secret": "<auth0 oauth secret>",
                 "subdomain": "<auth0 subdomain>",
-                "scope": ["profile", "openid", "email"]
+                "scope": [
+                    "profile",
+                    "openid",
+                    "email"
+                ]
             }
         }
     },
@@ -45,9 +52,9 @@
         "host": "localhost",
         "port": 6379
     },
-    "isDev" : false,
-    "isPrd" : true,
-    "isStg" : false,
-    "isUat" : false,
-    "isSit" : false
+    "isDev": false,
+    "isPrd": true,
+    "isStg": false,
+    "isUat": false,
+    "isSit": false
 }

@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const EmailService = require("./EmailService");
 
 // async..await is not allowed in global scope, must use a wrapper
 module.exports = (
@@ -10,8 +11,14 @@ module.exports = (
   html,
   attachments,
 ) => {
+
+  const emailService = new EmailService();
+
   return new Promise((resolve, reject) => {
     // create reusable transporter object using the default SMTP transport
+    const results = emailService.sendMailStatus();
+    if(!results.status) resolve(Error(results.message));
+    
     let transporter = nodemailer.createTransport({
       name: clientHostname, // the hostname of the client. in our case is the website
       host: process.env.MAIL_HOST,
