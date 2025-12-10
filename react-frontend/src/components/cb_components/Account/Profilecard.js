@@ -119,10 +119,7 @@ function ProfileCard(props) {
   function ProfileFullSection({ items, className }) {
     return items.map((item, index) => (
       <div key={index} className={`flex ${className} max-md:max-w-full mt-3`}>
-        <div
-          
-          className="flex flex-col flex-1 shrink basis-0 min-w-[250px] max-md:max-w-full"
-        >
+        <div className="flex flex-col flex-1 shrink basis-0 min-w-[250px] max-md:max-w-full">
           <div
             className="leading-none text-gray-600  mb-2 max-md:max-w-full"
             style={{ fontSize: "13px" }}

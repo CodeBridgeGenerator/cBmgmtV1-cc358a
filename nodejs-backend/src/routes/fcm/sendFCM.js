@@ -1,5 +1,5 @@
-const admin = require('firebase-admin');
-const serviceAccount = require('./gcp-service-account.json');
+const admin = require("firebase-admin");
+const serviceAccount = require("./gcp-service-account.json");
 
 // const messagePayload = {
 //     notification: {
@@ -29,35 +29,33 @@ const serviceAccount = require('./gcp-service-account.json');
 // ];
 
 async function sendFCM(messagePayload) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+  let isSuccess = false;
+  try {
+    const response = await admin.messaging().sendEachForMulticast({
+      ...messagePayload,
     });
-    let isSuccess = false;
-    try {
-        const response = await admin.messaging().sendEachForMulticast({
-            ...messagePayload
-        });
-        isSuccess = true;
+    isSuccess = true;
 
-        console.debug('FCM Response:', response);
-        console.debug(
-            `${response.successCount} messages were sent successfully.`
-        );
+    console.debug("FCM Response:", response);
+    console.debug(`${response.successCount} messages were sent successfully.`);
 
-        response.responses.forEach((res, idx) => {
-            if (res.success) {
-                console.debug(`Message to token[${idx}] sent successfully.`);
-            } else {
-                console.error(`Error sending to token[${idx}]:`, res.error);
-                // todo updat the table if the fcm token for user us invalid
-            }
-        });
+    response.responses.forEach((res, idx) => {
+      if (res.success) {
+        console.debug(`Message to token[${idx}] sent successfully.`);
+      } else {
+        console.error(`Error sending to token[${idx}]:`, res.error);
+        // todo updat the table if the fcm token for user us invalid
+      }
+    });
 
-        return { isSuccess, response };
-    } catch (error) {
-        console.error('Error sending FCM messages:', error);
-        return { isSuccess, error: error.message };
-    }
+    return { isSuccess, response };
+  } catch (error) {
+    console.error("Error sending FCM messages:", error);
+    return { isSuccess, error: error.message };
+  }
 }
 
 module.exports = sendFCM;

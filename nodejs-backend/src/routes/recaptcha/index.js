@@ -13,7 +13,7 @@ module.exports = function (app) {
 
   app.post(
     "/verify-recaptcha",
-    express.json({ type: "application/json" }), 
+    express.json({ type: "application/json" }),
     verifyRecaptcha,
   );
 };

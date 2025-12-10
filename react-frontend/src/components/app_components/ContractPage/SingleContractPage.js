@@ -12,47 +12,58 @@ import ProjectLayout from "../../Layouts/ProjectLayout";
 import BackendsPage from "../BackendsPage/BackendsPage";
 
 const SingleContractPage = (props) => {
-    const navigate = useNavigate();
-    const urlParams = useParams();
-    const [_entity, set_entity] = useState({});
+  const navigate = useNavigate();
+  const urlParams = useParams();
+  const [_entity, set_entity] = useState({});
   const [isHelpSidebarVisible, setHelpSidebarVisible] = useState(false);
 
-    const [crm, setCrm] = useState([]);
+  const [crm, setCrm] = useState([]);
 
-    useEffect(() => {
-        //on mount
-        client
-            .service("contract")
-            .get(urlParams.singleContractId, { query: { $populate: [            {
-                path: "createdBy",
-                service: "users",
-                select: ["name"],
-              },{
-                path: "updatedBy",
-                service: "users",
-                select: ["name"],
-              },"crm"] }})
-            .then((res) => {
-                set_entity(res || {});
-                const crm = Array.isArray(res.crm)
-            ? res.crm.map((elem) => ({ _id: elem._id, name: elem.name }))
-            : res.crm
-                ? [{ _id: res.crm._id, name: res.crm.name }]
-                : [];
+  useEffect(() => {
+    //on mount
+    client
+      .service("contract")
+      .get(urlParams.singleContractId, {
+        query: {
+          $populate: [
+            {
+              path: "createdBy",
+              service: "users",
+              select: ["name"],
+            },
+            {
+              path: "updatedBy",
+              service: "users",
+              select: ["name"],
+            },
+            "crm",
+          ],
+        },
+      })
+      .then((res) => {
+        set_entity(res || {});
+        const crm = Array.isArray(res.crm)
+          ? res.crm.map((elem) => ({ _id: elem._id, name: elem.name }))
+          : res.crm
+            ? [{ _id: res.crm._id, name: res.crm.name }]
+            : [];
         setCrm(crm);
-            })
-            .catch((error) => {
-                console.log({ error });
-                props.alert({ title: "Contract", type: "error", message: error.message || "Failed get contract" });
-            });
-    }, [props,urlParams.singleContractId]);
+      })
+      .catch((error) => {
+        console.log({ error });
+        props.alert({
+          title: "Contract",
+          type: "error",
+          message: error.message || "Failed get contract",
+        });
+      });
+  }, [props, urlParams.singleContractId]);
 
+  const goBack = () => {
+    navigate("/contract");
+  };
 
-    const goBack = () => {
-        navigate("/contract");
-    };
-
-      const toggleHelpSidebar = () => {
+  const toggleHelpSidebar = () => {
     setHelpSidebarVisible(!isHelpSidebarVisible);
   };
 
@@ -78,98 +89,105 @@ const SingleContractPage = (props) => {
       });
   };
 
-    const menuItems = [
-        {
-            label: "Copy link",
-            icon: "pi pi-copy",
-            command: () => copyPageLink(),
-        },
-        {
-            label: "Help",
-            icon: "pi pi-question-circle",
-            command: () => toggleHelpSidebar(),
-        },
-    ];
+  const menuItems = [
+    {
+      label: "Copy link",
+      icon: "pi pi-copy",
+      command: () => copyPageLink(),
+    },
+    {
+      label: "Help",
+      icon: "pi pi-question-circle",
+      command: () => toggleHelpSidebar(),
+    },
+  ];
 
-    return (
-        <ProjectLayout>
-        <div className="col-12 flex flex-column align-items-center">
-            <div className="col-12">
-                <div className="flex align-items-center justify-content-between">
-                <div className="flex align-items-center">
-                    <Button className="p-button-text" icon="pi pi-chevron-left" onClick={() => goBack()} />
-                    <h3 className="m-0">Contract</h3>
-                    <SplitButton
-                        model={menuItems.filter(
-                        (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
-                        )}
-                        dropdownIcon="pi pi-ellipsis-h"
-                        buttonClassName="hidden"
-                        menuButtonClassName="ml-1 p-button-text"
-                    />
-                </div>
-                
-                {/* <p>contract/{urlParams.singleContractId}</p> */}
+  return (
+    <ProjectLayout>
+      <div className="col-12 flex flex-column align-items-center">
+        <div className="col-12">
+          <div className="flex align-items-center justify-content-between">
+            <div className="flex align-items-center">
+              <Button
+                className="p-button-text"
+                icon="pi pi-chevron-left"
+                onClick={() => goBack()}
+              />
+              <h3 className="m-0">Contract</h3>
+              <SplitButton
+                model={menuItems.filter(
+                  (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
+                )}
+                dropdownIcon="pi pi-ellipsis-h"
+                buttonClassName="hidden"
+                menuButtonClassName="ml-1 p-button-text"
+              />
             </div>
-            <div className="card w-full">
-                <div className="grid ">
 
-            <div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">PO</label><p className="m-0 ml-3" >{_entity?.po}</p></div>
-            <div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">CRM</label>
-                    {crm.map((elem) => (
-                        <Link key={elem._id} to={`/crm/${elem._id}`}>
-                        <div>
-                  {" "}
-                            <p className="text-xl text-primary">{elem.name}</p>
-                            </div>
-                        </Link>
-                    ))}</div>
+            {/* <p>contract/{urlParams.singleContractId}</p> */}
+          </div>
+          <div className="card w-full">
+            <div className="grid ">
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">PO</label>
+                <p className="m-0 ml-3">{_entity?.po}</p>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">CRM</label>
+                {crm.map((elem) => (
+                  <Link key={elem._id} to={`/crm/${elem._id}`}>
+                    <div>
+                      {" "}
+                      <p className="text-xl text-primary">{elem.name}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
 
-                    <div className="col-12">&nbsp;</div>
-                </div>
+              <div className="col-12">&nbsp;</div>
             </div>
-         </div>
+          </div>
+        </div>
 
-      
-    <div className="col-12 mt-2">
-        <TabView>
-        
-                    <TabPanel header="Backends" leftIcon="pi pi-building-columns mr-2">
-                        <BackendsPage/>
-                    </TabPanel>
-                    
-        </TabView>
-    </div>
+        <div className="col-12 mt-2">
+          <TabView>
+            <TabPanel header="Backends" leftIcon="pi pi-building-columns mr-2">
+              <BackendsPage />
+            </TabPanel>
+          </TabView>
+        </div>
 
-
-      <CommentsSection
-        recordId={urlParams.singleContractId}
-        user={props.user}
-        alert={props.alert}
-        serviceName="contract"
-      />
-      <div
-        id="rightsidebar"
-        className={classNames("overlay-auto z-1 surface-overlay shadow-2 absolute right-0 w-20rem animation-duration-150 animation-ease-in-out", { "hidden" : !isHelpSidebarVisible })}
-        style={{ top: "60px", height: "calc(100% - 60px)" }}
-      >
-        <div className="flex flex-column h-full p-4">
-          <span className="text-xl font-medium text-900 mb-3">Help bar</span>
-          <div className="border-2 border-dashed surface-border border-round surface-section flex-auto"></div>
+        <CommentsSection
+          recordId={urlParams.singleContractId}
+          user={props.user}
+          alert={props.alert}
+          serviceName="contract"
+        />
+        <div
+          id="rightsidebar"
+          className={classNames(
+            "overlay-auto z-1 surface-overlay shadow-2 absolute right-0 w-20rem animation-duration-150 animation-ease-in-out",
+            { hidden: !isHelpSidebarVisible },
+          )}
+          style={{ top: "60px", height: "calc(100% - 60px)" }}
+        >
+          <div className="flex flex-column h-full p-4">
+            <span className="text-xl font-medium text-900 mb-3">Help bar</span>
+            <div className="border-2 border-dashed surface-border border-round surface-section flex-auto"></div>
+          </div>
         </div>
       </div>
-      </div>
-        </ProjectLayout>
-    );
+    </ProjectLayout>
+  );
 };
 
 const mapState = (state) => {
-    const { user, isLoggedIn } = state.auth;
-    return { user, isLoggedIn };
+  const { user, isLoggedIn } = state.auth;
+  return { user, isLoggedIn };
 };
 
 const mapDispatch = (dispatch) => ({
-    alert: (data) => dispatch.toast.alert(data),
+  alert: (data) => dispatch.toast.alert(data),
 });
 
 export default connect(mapState, mapDispatch)(SingleContractPage);

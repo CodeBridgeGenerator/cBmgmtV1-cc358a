@@ -5,6 +5,9 @@ const departments = require("./departments/departments.service.js");
 const sections = require("./sections/sections.service.js");
 const companyAddresses = require("./companyAddresses/companyAddresses.service.js");
 const companyPhones = require("./companyPhones/companyPhones.service.js");
+const departmentAdmin = require("./departmentAdmin/departmentAdmin.service.js");
+const departmentHOD = require("./departmentHOD/departmentHOD.service.js");
+const departmentHOS = require("./departmentHOS/departmentHOS.service.js");
 
 // User data
 const roles = require("./roles/roles.service.js");
@@ -16,9 +19,14 @@ const userChangePassword = require("./userChangePassword/userChangePassword.serv
 const userAddresses = require("./userAddresses/userAddresses.service.js");
 const userPhones = require("./userPhones/userPhones.service.js");
 const userInvites = require("./userInvites/userInvites.service.js");
+const employees = require("./employees/employees.service.js");
+const superior = require("./superior/superior.service.js");
+const staffinfo = require("./staffinfo/staffinfo.service.js");
 const users = require("./users/users.service.js");
+
 const loginHistory = require("./loginHistory/loginHistory.service.js");
 const ProfileMenu = require("./profileMenu/profileMenu.service.js");
+const userTrackerId = require("./userTrackerId/userTrackerId.service.js");
 
 // mail que and templates
 const mailQues = require("./mailQues/mailQues.service.js");
@@ -66,6 +74,9 @@ module.exports = function (app) {
   app.configure(companies);
   app.configure(branches);
   app.configure(departments);
+  app.configure(departmentAdmin);
+  app.configure(departmentHOD);
+  app.configure(departmentHOS);
   app.configure(sections);
   app.configure(roles);
   app.configure(positions);
@@ -79,6 +90,10 @@ module.exports = function (app) {
   app.configure(companyPhones);
   app.configure(userPhones);
   app.configure(userInvites);
+  app.configure(employees);
+  app.configure(superior);
+  app.configure(staffinfo);
+
   app.configure(dynaLoader);
   app.configure(dynaFields);
   app.configure(mailQues);
@@ -103,6 +118,7 @@ module.exports = function (app) {
   app.configure(loginHistory);
   app.configure(fcmQues);
   app.configure(fcm);
+  app.configure(userTrackerId);
 
   // ~cb-add-configure-service-name~
 };

@@ -9,56 +9,70 @@ import client from "../../../services/restClient";
 import CommentsSection from "../../common/CommentsSection";
 import ProjectLayout from "../../Layouts/ProjectLayout";
 
-
 const SingleBackendsPage = (props) => {
-    const navigate = useNavigate();
-    const urlParams = useParams();
-    const [_entity, set_entity] = useState({});
+  const navigate = useNavigate();
+  const urlParams = useParams();
+  const [_entity, set_entity] = useState({});
   const [isHelpSidebarVisible, setHelpSidebarVisible] = useState(false);
 
-    const [frontend, setFrontend] = useState([]);
-const [contract, setContract] = useState([]);
+  const [frontend, setFrontend] = useState([]);
+  const [contract, setContract] = useState([]);
 
-    useEffect(() => {
-        //on mount
-        client
-            .service("backends")
-            .get(urlParams.singleBackendsId, { query: { $populate: [            {
-                path: "createdBy",
-                service: "users",
-                select: ["name"],
-              },{
-                path: "updatedBy",
-                service: "users",
-                select: ["name"],
-              },"frontend","contract"] }})
-            .then((res) => {
-                set_entity(res || {});
-                const frontend = Array.isArray(res.frontend)
-            ? res.frontend.map((elem) => ({ _id: elem._id, projectName: elem.projectName }))
-            : res.frontend
-                ? [{ _id: res.frontend._id, projectName: res.frontend.projectName }]
-                : [];
+  useEffect(() => {
+    //on mount
+    client
+      .service("backends")
+      .get(urlParams.singleBackendsId, {
+        query: {
+          $populate: [
+            {
+              path: "createdBy",
+              service: "users",
+              select: ["name"],
+            },
+            {
+              path: "updatedBy",
+              service: "users",
+              select: ["name"],
+            },
+            "frontend",
+            "contract",
+          ],
+        },
+      })
+      .then((res) => {
+        set_entity(res || {});
+        const frontend = Array.isArray(res.frontend)
+          ? res.frontend.map((elem) => ({
+              _id: elem._id,
+              projectName: elem.projectName,
+            }))
+          : res.frontend
+            ? [{ _id: res.frontend._id, projectName: res.frontend.projectName }]
+            : [];
         setFrontend(frontend);
-const contract = Array.isArray(res.contract)
-            ? res.contract.map((elem) => ({ _id: elem._id, crm: elem.crm }))
-            : res.contract
-                ? [{ _id: res.contract._id, crm: res.contract.crm }]
-                : [];
+        const contract = Array.isArray(res.contract)
+          ? res.contract.map((elem) => ({ _id: elem._id, crm: elem.crm }))
+          : res.contract
+            ? [{ _id: res.contract._id, crm: res.contract.crm }]
+            : [];
         setContract(contract);
-            })
-            .catch((error) => {
-                console.log({ error });
-                props.alert({ title: "Backends", type: "error", message: error.message || "Failed get backends" });
-            });
-    }, [props,urlParams.singleBackendsId]);
+      })
+      .catch((error) => {
+        console.log({ error });
+        props.alert({
+          title: "Backends",
+          type: "error",
+          message: error.message || "Failed get backends",
+        });
+      });
+  }, [props, urlParams.singleBackendsId]);
 
+  const goBack = () => {
+    navigate("/backends");
+  };
 
-    const goBack = () => {
-        navigate("/backends");
-    };
-
-      const toggleHelpSidebar = () => {
+  const toggleHelpSidebar = () => {
     setHelpSidebarVisible(!isHelpSidebarVisible);
   };
 
@@ -84,102 +98,124 @@ const contract = Array.isArray(res.contract)
       });
   };
 
-    const menuItems = [
-        {
-            label: "Copy link",
-            icon: "pi pi-copy",
-            command: () => copyPageLink(),
-        },
-        {
-            label: "Help",
-            icon: "pi pi-question-circle",
-            command: () => toggleHelpSidebar(),
-        },
-    ];
+  const menuItems = [
+    {
+      label: "Copy link",
+      icon: "pi pi-copy",
+      command: () => copyPageLink(),
+    },
+    {
+      label: "Help",
+      icon: "pi pi-question-circle",
+      command: () => toggleHelpSidebar(),
+    },
+  ];
 
-    return (
-        <ProjectLayout>
-        <div className="col-12 flex flex-column align-items-center">
-            <div className="col-12">
-                <div className="flex align-items-center justify-content-between">
-                <div className="flex align-items-center">
-                    <Button className="p-button-text" icon="pi pi-chevron-left" onClick={() => goBack()} />
-                    <h3 className="m-0">Backends</h3>
-                    <SplitButton
-                        model={menuItems.filter(
-                        (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
-                        )}
-                        dropdownIcon="pi pi-ellipsis-h"
-                        buttonClassName="hidden"
-                        menuButtonClassName="ml-1 p-button-text"
-                    />
-                </div>
-                
-                {/* <p>backends/{urlParams.singleBackendsId}</p> */}
+  return (
+    <ProjectLayout>
+      <div className="col-12 flex flex-column align-items-center">
+        <div className="col-12">
+          <div className="flex align-items-center justify-content-between">
+            <div className="flex align-items-center">
+              <Button
+                className="p-button-text"
+                icon="pi pi-chevron-left"
+                onClick={() => goBack()}
+              />
+              <h3 className="m-0">Backends</h3>
+              <SplitButton
+                model={menuItems.filter(
+                  (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
+                )}
+                dropdownIcon="pi pi-ellipsis-h"
+                buttonClassName="hidden"
+                menuButtonClassName="ml-1 p-button-text"
+              />
             </div>
-            <div className="card w-full">
-                <div className="grid ">
 
-            <div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">projectName</label><p className="m-0 ml-3" >{_entity?.projectName}</p></div>
-<div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">port</label><p className="m-0 ml-3" >{Number(_entity?.port)}</p></div>
-<div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">domain</label><p className="m-0 ml-3" >{_entity?.domain}</p></div>
-<div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">env</label><p className="m-0 ml-3" >{_entity?.env}</p></div>
-<div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">Dir</label><p className="m-0 ml-3" >{_entity?.dir}</p></div>
-            <div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">frontend</label>
-                    {frontend.map((elem) => (
-                        <Link key={elem._id} to={`/frontends/${elem._id}`}>
-                        <div>
-                  {" "}
-                            <p className="text-xl text-primary">{elem.projectName}</p>
-                            </div>
-                        </Link>
-                    ))}</div>
-<div className="col-12 md:col-6 lg:col-3"><label className="text-sm text-gray-600">Contract</label>
-                    {contract.map((elem) => (
-                        <Link key={elem._id} to={`/contract/${elem._id}`}>
-                        <div>
-                  {" "}
-                            <p className="text-xl text-primary">{elem.crm}</p>
-                            </div>
-                        </Link>
-                    ))}</div>
+            {/* <p>backends/{urlParams.singleBackendsId}</p> */}
+          </div>
+          <div className="card w-full">
+            <div className="grid ">
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">projectName</label>
+                <p className="m-0 ml-3">{_entity?.projectName}</p>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">port</label>
+                <p className="m-0 ml-3">{Number(_entity?.port)}</p>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">domain</label>
+                <p className="m-0 ml-3">{_entity?.domain}</p>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">env</label>
+                <p className="m-0 ml-3">{_entity?.env}</p>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">Dir</label>
+                <p className="m-0 ml-3">{_entity?.dir}</p>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">frontend</label>
+                {frontend.map((elem) => (
+                  <Link key={elem._id} to={`/frontends/${elem._id}`}>
+                    <div>
+                      {" "}
+                      <p className="text-xl text-primary">{elem.projectName}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <label className="text-sm text-gray-600">Contract</label>
+                {contract.map((elem) => (
+                  <Link key={elem._id} to={`/contract/${elem._id}`}>
+                    <div>
+                      {" "}
+                      <p className="text-xl text-primary">{elem.crm}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
 
-                    <div className="col-12">&nbsp;</div>
-                </div>
+              <div className="col-12">&nbsp;</div>
             </div>
-         </div>
+          </div>
+        </div>
 
-      
-
-
-      <CommentsSection
-        recordId={urlParams.singleBackendsId}
-        user={props.user}
-        alert={props.alert}
-        serviceName="backends"
-      />
-      <div
-        id="rightsidebar"
-        className={classNames("overlay-auto z-1 surface-overlay shadow-2 absolute right-0 w-20rem animation-duration-150 animation-ease-in-out", { "hidden" : !isHelpSidebarVisible })}
-        style={{ top: "60px", height: "calc(100% - 60px)" }}
-      >
-        <div className="flex flex-column h-full p-4">
-          <span className="text-xl font-medium text-900 mb-3">Help bar</span>
-          <div className="border-2 border-dashed surface-border border-round surface-section flex-auto"></div>
+        <CommentsSection
+          recordId={urlParams.singleBackendsId}
+          user={props.user}
+          alert={props.alert}
+          serviceName="backends"
+        />
+        <div
+          id="rightsidebar"
+          className={classNames(
+            "overlay-auto z-1 surface-overlay shadow-2 absolute right-0 w-20rem animation-duration-150 animation-ease-in-out",
+            { hidden: !isHelpSidebarVisible },
+          )}
+          style={{ top: "60px", height: "calc(100% - 60px)" }}
+        >
+          <div className="flex flex-column h-full p-4">
+            <span className="text-xl font-medium text-900 mb-3">Help bar</span>
+            <div className="border-2 border-dashed surface-border border-round surface-section flex-auto"></div>
+          </div>
         </div>
       </div>
-      </div>
-        </ProjectLayout>
-    );
+    </ProjectLayout>
+  );
 };
 
 const mapState = (state) => {
-    const { user, isLoggedIn } = state.auth;
-    return { user, isLoggedIn };
+  const { user, isLoggedIn } = state.auth;
+  return { user, isLoggedIn };
 };
 
 const mapDispatch = (dispatch) => ({
-    alert: (data) => dispatch.toast.alert(data),
+  alert: (data) => dispatch.toast.alert(data),
 });
 
 export default connect(mapState, mapDispatch)(SingleBackendsPage);

@@ -48,7 +48,7 @@ const initializeSuperUser = async (app) => {
           status: false,
           sendMailCounter: 0,
           code: codeGen(),
-          role: "67435a2c6521f76d8ac46f33"
+          role: "67435a2c6521f76d8ac46f33",
         })),
       );
       // console.debug(`Created userInvites for: ${userEmail.join(", ")}`);
@@ -70,8 +70,8 @@ const insertRefData = (app) => {
     "templates",
     "roles",
     "positions",
-    // "users",
-    // "profiles",
+    "users",
+    "profiles",
     "permission_services",
     "companies",
     "branches",
@@ -90,12 +90,14 @@ const insertRefData = (app) => {
     const service = _.camelCase(names[1]);
     if (service) {
       const existing = app.service(service).find({});
-      promises.push(existing);
-      services.push(service);
-    } else console.debug("file empty", names[1]);
+      if (existing && existing.data && existing.data?.length === 0) {
+        promises.push(existing);
+        services.push(service);
+      }
+    }
   });
 
-  if (_.isEmpty(services)) return;
+  if (services && services?.length === 0) return;
 
   Promise.all(promises).then(async (allData) => {
     try {
@@ -104,12 +106,12 @@ const insertRefData = (app) => {
           let data = allData[i];
           // Decrypt data if encrypted
           if (data && data.encrypted) {
-            console.debug(`Decrypting ${service} response:`, data.encrypted);
+            // console.debug(`Decrypting ${service} response:`, data.encrypted);
             data = decryptData(data.encrypted);
-            console.debug(
-              `Decrypted ${service} response:`,
-              JSON.stringify(data, null, 2),
-            );
+            // console.debug(
+            //   `Decrypted ${service} response:`,
+            //   JSON.stringify(data, null, 2),
+            // );
           }
           const _results = insertData(app, data.data || [], files[i], service);
           if (!_.isEmpty(_results)) results.push(_results);

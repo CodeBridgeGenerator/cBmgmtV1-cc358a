@@ -56,10 +56,6 @@ const PermissionServicesDataTable = ({
   const urlParams = useParams();
   const [globalFilter, setGlobalFilter] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
-  const [data, setData] = useState([]);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [triggerDownload, setTriggerDownload] = useState(false);
-  const [expandedRows, setExpandedRows] = useState([]);
 
   const header = (
     <div
@@ -130,8 +126,6 @@ const PermissionServicesDataTable = ({
       );
     },
     JumpToPageInput: (options) => {
-      console.log("option", options);
-
       return (
         <div>
           <span>Page</span>

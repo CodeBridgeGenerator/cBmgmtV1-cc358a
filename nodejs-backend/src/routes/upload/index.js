@@ -16,11 +16,7 @@ module.exports = function (app) {
   const upload = multer({ storage: multer.memoryStorage() });
   app.use(attachApp(app));
   // Manage s3 files
-  app.post(
-    "/s3uploader",
-    upload.array("files"), 
-    objectUpload2S3,
-  );
+  app.post("/s3uploader", upload.array("files"), objectUpload2S3);
   app.post(
     "/s3delete",
     express.raw({ type: "application/json" }),

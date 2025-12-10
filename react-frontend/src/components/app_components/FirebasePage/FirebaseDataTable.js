@@ -1,12 +1,12 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import React, { useState, useRef, useEffect} from 'react';
-import _ from 'lodash';
-import { Button } from 'primereact/button';
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import React, { useState, useRef, useEffect } from "react";
+import _ from "lodash";
+import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import UploadService from "../../../services/UploadService";
-import { InputText } from 'primereact/inputtext';
+import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import DownloadCSV from "../../../utils/DownloadCSV";
@@ -18,31 +18,65 @@ import DuplicateIcon from "../../../assets/media/Duplicate.png";
 import DeleteIcon from "../../../assets/media/Trash.png";
 import { Checkbox } from "primereact/checkbox";
 
-const FirebaseDataTable = ({ items, fields, onEditRow, onRowDelete, onRowClick, searchDialog, setSearchDialog,   showUpload, setShowUpload,
-    showFilter, setShowFilter,
-    showColumns, setShowColumns, onClickSaveFilteredfields ,
-    selectedFilterFields, setSelectedFilterFields,
-    selectedHideFields, setSelectedHideFields, onClickSaveHiddenfields, loading, user,   selectedDelete,
-  setSelectedDelete, onCreateResult}) => {
-    const dt = useRef(null);
-    const urlParams = useParams();
-    const [globalFilter, setGlobalFilter] = useState('');
+const FirebaseDataTable = ({
+  items,
+  fields,
+  onEditRow,
+  onRowDelete,
+  onRowClick,
+  searchDialog,
+  setSearchDialog,
+  showUpload,
+  setShowUpload,
+  showFilter,
+  setShowFilter,
+  showColumns,
+  setShowColumns,
+  onClickSaveFilteredfields,
+  selectedFilterFields,
+  setSelectedFilterFields,
+  selectedHideFields,
+  setSelectedHideFields,
+  onClickSaveHiddenfields,
+  loading,
+  user,
+  selectedDelete,
+  setSelectedDelete,
+  onCreateResult,
+}) => {
+  const dt = useRef(null);
+  const urlParams = useParams();
+  const [globalFilter, setGlobalFilter] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [data, setData] = useState([]);
 
-const pTemplate0 = (rowData, { rowIndex }) => <p >{rowData.projectId}</p>
-const pTemplate1 = (rowData, { rowIndex }) => <p >{rowData.url}</p>
-const pTemplate2 = (rowData, { rowIndex }) => <p >{rowData.customUrl}</p>
-const pTemplate3 = (rowData, { rowIndex }) => <p >{rowData.key}</p>
-const pTemplate4 = (rowData, { rowIndex }) => <p >{rowData.env}</p>
-const p_numberTemplate5 = (rowData, { rowIndex }) => <p >{rowData.projectNumber}</p>
-const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.webApiKey}</p>
-const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.appId}</p>
-    const editTemplate = (rowData, { rowIndex }) => <Button onClick={() => onEditRow(rowData, rowIndex)} icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`} className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`} />;
-    const deleteTemplate = (rowData, { rowIndex }) => <Button onClick={() => onRowDelete(rowData._id)} icon="pi pi-times" className="p-button-rounded p-button-danger p-button-text" />;
-    
-      const checkboxTemplate = (rowData) => (
+  const pTemplate0 = (rowData, { rowIndex }) => <p>{rowData.projectId}</p>;
+  const pTemplate1 = (rowData, { rowIndex }) => <p>{rowData.url}</p>;
+  const pTemplate2 = (rowData, { rowIndex }) => <p>{rowData.customUrl}</p>;
+  const pTemplate3 = (rowData, { rowIndex }) => <p>{rowData.key}</p>;
+  const pTemplate4 = (rowData, { rowIndex }) => <p>{rowData.env}</p>;
+  const p_numberTemplate5 = (rowData, { rowIndex }) => (
+    <p>{rowData.projectNumber}</p>
+  );
+  const pTemplate6 = (rowData, { rowIndex }) => <p>{rowData.webApiKey}</p>;
+  const pTemplate7 = (rowData, { rowIndex }) => <p>{rowData.appId}</p>;
+  const editTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onEditRow(rowData, rowIndex)}
+      icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`}
+      className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`}
+    />
+  );
+  const deleteTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onRowDelete(rowData._id)}
+      icon="pi pi-times"
+      className="p-button-rounded p-button-danger p-button-text"
+    />
+  );
+
+  const checkboxTemplate = (rowData) => (
     <Checkbox
       checked={selectedItems.some((item) => item._id === rowData._id)}
       onChange={(e) => {
@@ -83,7 +117,7 @@ const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.appId}</p>
       console.error("Failed to delete selected records", error);
     }
   };
-    
+
   const handleMessage = () => {
     setShowDialog(true); // Open the dialog
   };
@@ -92,10 +126,10 @@ const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.appId}</p>
     setShowDialog(false); // Close the dialog
   };
 
-    return (
-        <>
-        <DataTable 
-           value={items}
+  return (
+    <>
+      <DataTable
+        value={items}
         ref={dt}
         removableSort
         onRowClick={onRowClick}
@@ -113,25 +147,87 @@ const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.appId}</p>
         selection={selectedItems}
         onSelectionChange={(e) => setSelectedItems(e.value)}
         onCreateResult={onCreateResult}
-        >
-                <Column
+      >
+        <Column
           selectionMode="multiple"
           headerStyle={{ width: "3rem" }}
           body={checkboxTemplate}
         />
-<Column field="projectId" header="Project ID" body={pTemplate0} filter={selectedFilterFields.includes("projectId")} hidden={selectedHideFields?.includes("projectId")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="url" header="URL" body={pTemplate1} filter={selectedFilterFields.includes("url")} hidden={selectedHideFields?.includes("url")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="customUrl" header="Custom Url" body={pTemplate2} filter={selectedFilterFields.includes("customUrl")} hidden={selectedHideFields?.includes("customUrl")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="key" header="Key" body={pTemplate3} filter={selectedFilterFields.includes("key")} hidden={selectedHideFields?.includes("key")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="env" header="env" body={pTemplate4} filter={selectedFilterFields.includes("env")} hidden={selectedHideFields?.includes("env")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="projectNumber" header="Project number" body={p_numberTemplate5} filter={selectedFilterFields.includes("projectNumber")} hidden={selectedHideFields?.includes("projectNumber")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="webApiKey" header="Web API Key" body={pTemplate6} filter={selectedFilterFields.includes("webApiKey")} hidden={selectedHideFields?.includes("webApiKey")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="appId" header="App ID" body={pTemplate7} filter={selectedFilterFields.includes("appId")} hidden={selectedHideFields?.includes("appId")}  sortable style={{ minWidth: "8rem" }} />
-            <Column header="Edit" body={editTemplate} />
-            <Column header="Delete" body={deleteTemplate} />
-            
-        </DataTable>
-
+        <Column
+          field="projectId"
+          header="Project ID"
+          body={pTemplate0}
+          filter={selectedFilterFields.includes("projectId")}
+          hidden={selectedHideFields?.includes("projectId")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="url"
+          header="URL"
+          body={pTemplate1}
+          filter={selectedFilterFields.includes("url")}
+          hidden={selectedHideFields?.includes("url")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="customUrl"
+          header="Custom Url"
+          body={pTemplate2}
+          filter={selectedFilterFields.includes("customUrl")}
+          hidden={selectedHideFields?.includes("customUrl")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="key"
+          header="Key"
+          body={pTemplate3}
+          filter={selectedFilterFields.includes("key")}
+          hidden={selectedHideFields?.includes("key")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="env"
+          header="env"
+          body={pTemplate4}
+          filter={selectedFilterFields.includes("env")}
+          hidden={selectedHideFields?.includes("env")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="projectNumber"
+          header="Project number"
+          body={p_numberTemplate5}
+          filter={selectedFilterFields.includes("projectNumber")}
+          hidden={selectedHideFields?.includes("projectNumber")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="webApiKey"
+          header="Web API Key"
+          body={pTemplate6}
+          filter={selectedFilterFields.includes("webApiKey")}
+          hidden={selectedHideFields?.includes("webApiKey")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="appId"
+          header="App ID"
+          body={pTemplate7}
+          filter={selectedFilterFields.includes("appId")}
+          hidden={selectedHideFields?.includes("appId")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column header="Edit" body={editTemplate} />
+        <Column header="Delete" body={deleteTemplate} />
+      </DataTable>
 
       {selectedItems.length > 0 ? (
         <div
@@ -307,20 +403,28 @@ const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.appId}</p>
         </div>
       ) : null}
 
-
-        <Dialog header="Upload Firebase Data" visible={showUpload} onHide={() => setShowUpload(false)}>
-        <UploadService 
-          user={user} 
-          serviceName="firebase"            
+      <Dialog
+        header="Upload Firebase Data"
+        visible={showUpload}
+        onHide={() => setShowUpload(false)}
+      >
+        <UploadService
+          user={user}
+          serviceName="firebase"
           onUploadComplete={() => {
             setShowUpload(false); // Close the dialog after upload
-          }}/>
+          }}
+        />
       </Dialog>
 
-      <Dialog header="Search Firebase" visible={searchDialog} onHide={() => setSearchDialog(false)}>
-      Search
-    </Dialog>
-    <Dialog
+      <Dialog
+        header="Search Firebase"
+        visible={searchDialog}
+        onHide={() => setSearchDialog(false)}
+      >
+        Search
+      </Dialog>
+      <Dialog
         header="Filter Users"
         visible={showFilter}
         onHide={() => setShowFilter(false)}
@@ -345,7 +449,7 @@ const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.appId}</p>
             console.log(selectedFilterFields);
             onClickSaveFilteredfields(selectedFilterFields);
             setSelectedFilterFields(selectedFilterFields);
-            setShowFilter(false)
+            setShowFilter(false);
           }}
         ></Button>
       </Dialog>
@@ -375,12 +479,12 @@ const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.appId}</p>
             console.log(selectedHideFields);
             onClickSaveHiddenfields(selectedHideFields);
             setSelectedHideFields(selectedHideFields);
-            setShowColumns(false)
+            setShowColumns(false);
           }}
         ></Button>
       </Dialog>
-        </>
-    );
+    </>
+  );
 };
 
 export default FirebaseDataTable;

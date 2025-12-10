@@ -1,12 +1,12 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import React, { useState, useRef, useEffect} from 'react';
-import _ from 'lodash';
-import { Button } from 'primereact/button';
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import React, { useState, useRef, useEffect } from "react";
+import _ from "lodash";
+import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import UploadService from "../../../services/UploadService";
-import { InputText } from 'primereact/inputtext';
+import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import DownloadCSV from "../../../utils/DownloadCSV";
@@ -18,30 +18,72 @@ import DuplicateIcon from "../../../assets/media/Duplicate.png";
 import DeleteIcon from "../../../assets/media/Trash.png";
 import { Checkbox } from "primereact/checkbox";
 
-const CrmDataTable = ({ items, fields, onEditRow, onRowDelete, onRowClick, searchDialog, setSearchDialog,   showUpload, setShowUpload,
-    showFilter, setShowFilter,
-    showColumns, setShowColumns, onClickSaveFilteredfields ,
-    selectedFilterFields, setSelectedFilterFields,
-    selectedHideFields, setSelectedHideFields, onClickSaveHiddenfields, loading, user,   selectedDelete,
-  setSelectedDelete, onCreateResult}) => {
-    const dt = useRef(null);
-    const urlParams = useParams();
-    const [globalFilter, setGlobalFilter] = useState('');
+const CrmDataTable = ({
+  items,
+  fields,
+  onEditRow,
+  onRowDelete,
+  onRowClick,
+  searchDialog,
+  setSearchDialog,
+  showUpload,
+  setShowUpload,
+  showFilter,
+  setShowFilter,
+  showColumns,
+  setShowColumns,
+  onClickSaveFilteredfields,
+  selectedFilterFields,
+  setSelectedFilterFields,
+  selectedHideFields,
+  setSelectedHideFields,
+  onClickSaveHiddenfields,
+  loading,
+  user,
+  selectedDelete,
+  setSelectedDelete,
+  onCreateResult,
+}) => {
+  const dt = useRef(null);
+  const urlParams = useParams();
+  const [globalFilter, setGlobalFilter] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [data, setData] = useState([]);
 
-const pTemplate0 = (rowData, { rowIndex }) => <p >{rowData.name}</p>
-const dropdownTemplate1 = (rowData, { rowIndex }) => <p >{rowData.company?.name}</p>
-const dropdownTemplate2 = (rowData, { rowIndex }) => <p >{rowData.person?.name}</p>
-const dropdownTemplate3 = (rowData, { rowIndex }) => <p >{rowData.opportunity?.states}</p>
-const p_numberTemplate4 = (rowData, { rowIndex }) => <p >{rowData.appCost}</p>
-const p_numberTemplate5 = (rowData, { rowIndex }) => <p >{rowData.supportCost}</p>
-const p_numberTemplate6 = (rowData, { rowIndex }) => <p >{rowData.otherCost}</p>
-    const editTemplate = (rowData, { rowIndex }) => <Button onClick={() => onEditRow(rowData, rowIndex)} icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`} className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`} />;
-    const deleteTemplate = (rowData, { rowIndex }) => <Button onClick={() => onRowDelete(rowData._id)} icon="pi pi-times" className="p-button-rounded p-button-danger p-button-text" />;
-    
-      const checkboxTemplate = (rowData) => (
+  const pTemplate0 = (rowData, { rowIndex }) => <p>{rowData.name}</p>;
+  const dropdownTemplate1 = (rowData, { rowIndex }) => (
+    <p>{rowData.company?.name}</p>
+  );
+  const dropdownTemplate2 = (rowData, { rowIndex }) => (
+    <p>{rowData.person?.name}</p>
+  );
+  const dropdownTemplate3 = (rowData, { rowIndex }) => (
+    <p>{rowData.opportunity?.states}</p>
+  );
+  const p_numberTemplate4 = (rowData, { rowIndex }) => <p>{rowData.appCost}</p>;
+  const p_numberTemplate5 = (rowData, { rowIndex }) => (
+    <p>{rowData.supportCost}</p>
+  );
+  const p_numberTemplate6 = (rowData, { rowIndex }) => (
+    <p>{rowData.otherCost}</p>
+  );
+  const editTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onEditRow(rowData, rowIndex)}
+      icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`}
+      className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`}
+    />
+  );
+  const deleteTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onRowDelete(rowData._id)}
+      icon="pi pi-times"
+      className="p-button-rounded p-button-danger p-button-text"
+    />
+  );
+
+  const checkboxTemplate = (rowData) => (
     <Checkbox
       checked={selectedItems.some((item) => item._id === rowData._id)}
       onChange={(e) => {
@@ -82,7 +124,7 @@ const p_numberTemplate6 = (rowData, { rowIndex }) => <p >{rowData.otherCost}</p>
       console.error("Failed to delete selected records", error);
     }
   };
-    
+
   const handleMessage = () => {
     setShowDialog(true); // Open the dialog
   };
@@ -91,10 +133,10 @@ const p_numberTemplate6 = (rowData, { rowIndex }) => <p >{rowData.otherCost}</p>
     setShowDialog(false); // Close the dialog
   };
 
-    return (
-        <>
-        <DataTable 
-           value={items}
+  return (
+    <>
+      <DataTable
+        value={items}
         ref={dt}
         removableSort
         onRowClick={onRowClick}
@@ -111,25 +153,75 @@ const p_numberTemplate6 = (rowData, { rowIndex }) => <p >{rowData.otherCost}</p>
         alwaysShowPaginator={!urlParams.singleUsersId}
         selection={selectedItems}
         onSelectionChange={(e) => setSelectedItems(e.value)}
-        onCreateResult={onCreateResult}
-        >
-                <Column
+      >
+        <Column
           selectionMode="multiple"
           headerStyle={{ width: "3rem" }}
           body={checkboxTemplate}
         />
-<Column field="name" header="Name" body={pTemplate0} filter={selectedFilterFields.includes("name")} hidden={selectedHideFields?.includes("name")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="company" header="Company" body={dropdownTemplate1} filter={selectedFilterFields.includes("company")} hidden={selectedHideFields?.includes("company")}  style={{ minWidth: "8rem" }} />
-<Column field="person" header="Person" body={dropdownTemplate2} filter={selectedFilterFields.includes("person")} hidden={selectedHideFields?.includes("person")}  style={{ minWidth: "8rem" }} />
-<Column field="opportunity" header="Opportunity" body={dropdownTemplate3} filter={selectedFilterFields.includes("opportunity")} hidden={selectedHideFields?.includes("opportunity")}  style={{ minWidth: "8rem" }} />
-<Column field="appCost" header="App Cost" body={p_numberTemplate4} filter={selectedFilterFields.includes("appCost")} hidden={selectedHideFields?.includes("appCost")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="supportCost" header="Support Cost" body={p_numberTemplate5} filter={selectedFilterFields.includes("supportCost")} hidden={selectedHideFields?.includes("supportCost")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="otherCost" header="Other Cost" body={p_numberTemplate6} filter={selectedFilterFields.includes("otherCost")} hidden={selectedHideFields?.includes("otherCost")}  sortable style={{ minWidth: "8rem" }} />
-            <Column header="Edit" body={editTemplate} />
-            <Column header="Delete" body={deleteTemplate} />
-            
-        </DataTable>
-
+        <Column
+          field="name"
+          header="Name"
+          body={pTemplate0}
+          filter={selectedFilterFields.includes("name")}
+          hidden={selectedHideFields?.includes("name")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="company"
+          header="Company"
+          body={dropdownTemplate1}
+          filter={selectedFilterFields.includes("company")}
+          hidden={selectedHideFields?.includes("company")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="person"
+          header="Person"
+          body={dropdownTemplate2}
+          filter={selectedFilterFields.includes("person")}
+          hidden={selectedHideFields?.includes("person")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="opportunity"
+          header="Opportunity"
+          body={dropdownTemplate3}
+          filter={selectedFilterFields.includes("opportunity")}
+          hidden={selectedHideFields?.includes("opportunity")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="appCost"
+          header="App Cost"
+          body={p_numberTemplate4}
+          filter={selectedFilterFields.includes("appCost")}
+          hidden={selectedHideFields?.includes("appCost")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="supportCost"
+          header="Support Cost"
+          body={p_numberTemplate5}
+          filter={selectedFilterFields.includes("supportCost")}
+          hidden={selectedHideFields?.includes("supportCost")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="otherCost"
+          header="Other Cost"
+          body={p_numberTemplate6}
+          filter={selectedFilterFields.includes("otherCost")}
+          hidden={selectedHideFields?.includes("otherCost")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column header="Edit" body={editTemplate} />
+        <Column header="Delete" body={deleteTemplate} />
+      </DataTable>
 
       {selectedItems.length > 0 ? (
         <div
@@ -305,20 +397,28 @@ const p_numberTemplate6 = (rowData, { rowIndex }) => <p >{rowData.otherCost}</p>
         </div>
       ) : null}
 
-
-        <Dialog header="Upload Crm Data" visible={showUpload} onHide={() => setShowUpload(false)}>
-        <UploadService 
-          user={user} 
-          serviceName="crm"            
+      <Dialog
+        header="Upload Crm Data"
+        visible={showUpload}
+        onHide={() => setShowUpload(false)}
+      >
+        <UploadService
+          user={user}
+          serviceName="crm"
           onUploadComplete={() => {
             setShowUpload(false); // Close the dialog after upload
-          }}/>
+          }}
+        />
       </Dialog>
 
-      <Dialog header="Search Crm" visible={searchDialog} onHide={() => setSearchDialog(false)}>
-      Search
-    </Dialog>
-    <Dialog
+      <Dialog
+        header="Search Crm"
+        visible={searchDialog}
+        onHide={() => setSearchDialog(false)}
+      >
+        Search
+      </Dialog>
+      <Dialog
         header="Filter Users"
         visible={showFilter}
         onHide={() => setShowFilter(false)}
@@ -343,7 +443,7 @@ const p_numberTemplate6 = (rowData, { rowIndex }) => <p >{rowData.otherCost}</p>
             console.log(selectedFilterFields);
             onClickSaveFilteredfields(selectedFilterFields);
             setSelectedFilterFields(selectedFilterFields);
-            setShowFilter(false)
+            setShowFilter(false);
           }}
         ></Button>
       </Dialog>
@@ -373,12 +473,12 @@ const p_numberTemplate6 = (rowData, { rowIndex }) => <p >{rowData.otherCost}</p>
             console.log(selectedHideFields);
             onClickSaveHiddenfields(selectedHideFields);
             setSelectedHideFields(selectedHideFields);
-            setShowColumns(false)
+            setShowColumns(false);
           }}
         ></Button>
       </Dialog>
-        </>
-    );
+    </>
+  );
 };
 
 export default CrmDataTable;

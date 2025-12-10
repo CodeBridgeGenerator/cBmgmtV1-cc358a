@@ -20,13 +20,7 @@
   "stack": [
     {
       "appName": "nodejs-backend",
-      "environments": [
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
+      "environments": [null, null, null, null, null],
       "pathToLogo": {
         "s": "/assets/applications_logos/nodejs-s.png",
         "l": "/assets/applications_logos/nodejs.png"
@@ -38,13 +32,7 @@
     },
     {
       "appName": "react-frontend",
-      "environments": [
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
+      "environments": [null, null, null, null, null],
       "pathToLogo": {
         "s": "/assets/applications_logos/react-s.png",
         "l": "/assets/applications_logos/react.png"
@@ -327,9 +315,7 @@
       "edit": true,
       "delete": true,
       "single": true,
-      "sidebar": [
-        "users"
-      ],
+      "sidebar": ["users"],
       "schemaList": [
         {
           "fieldName": "name",
@@ -410,9 +396,7 @@
             "refServiceName": "companies",
             "refDatabaseName": "companies",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "name"
-            ]
+            "identifierFieldName": ["name"]
           }
         },
         {
@@ -454,9 +438,7 @@
             "refServiceName": "branches",
             "refDatabaseName": "branches",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "name"
-            ]
+            "identifierFieldName": ["name"]
           }
         },
         {
@@ -498,9 +480,7 @@
             "refServiceName": "opportunity",
             "refDatabaseName": "opportunity",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "states"
-            ]
+            "identifierFieldName": ["states"]
           }
         },
         {
@@ -672,9 +652,7 @@
       "edit": true,
       "delete": true,
       "single": true,
-      "sidebar": [
-        "users"
-      ],
+      "sidebar": ["users"],
       "schemaList": [
         {
           "fieldName": "states",
@@ -887,9 +865,7 @@
       "edit": true,
       "delete": true,
       "single": true,
-      "sidebar": [
-        "users"
-      ],
+      "sidebar": ["users"],
       "schemaList": [
         {
           "fieldName": "crm",
@@ -937,9 +913,7 @@
             "refServiceName": "crm",
             "refDatabaseName": "crm",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "name"
-            ]
+            "identifierFieldName": ["name"]
           }
         },
         {
@@ -1212,9 +1186,7 @@
       "edit": true,
       "delete": true,
       "single": true,
-      "sidebar": [
-        "users"
-      ],
+      "sidebar": ["users"],
       "schemaList": [
         {
           "fieldName": "apikey",
@@ -1518,9 +1490,7 @@
       "edit": true,
       "delete": true,
       "single": true,
-      "sidebar": [
-        "users"
-      ],
+      "sidebar": ["users"],
       "schemaList": [
         {
           "fieldName": "projectName",
@@ -1749,9 +1719,7 @@
             "refServiceName": "frontends",
             "refDatabaseName": "frontends",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "projectName"
-            ]
+            "identifierFieldName": ["projectName"]
           }
         },
         {
@@ -1793,9 +1761,7 @@
             "refServiceName": "contract",
             "refDatabaseName": "contract",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "crm"
-            ]
+            "identifierFieldName": ["crm"]
           }
         },
         {
@@ -1874,9 +1840,7 @@
       "edit": true,
       "delete": true,
       "single": true,
-      "sidebar": [
-        "users"
-      ],
+      "sidebar": ["users"],
       "schemaList": [
         {
           "fieldName": "projectName",
@@ -2058,9 +2022,7 @@
             "refServiceName": "firebase",
             "refDatabaseName": "firebase",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "projectId"
-            ]
+            "identifierFieldName": ["projectId"]
           }
         }
       ],
@@ -2089,9 +2051,7 @@
       "edit": true,
       "delete": true,
       "single": true,
-      "sidebar": [
-        "users"
-      ],
+      "sidebar": ["users"],
       "schemaList": [
         {
           "fieldName": "projectId",

@@ -75,9 +75,9 @@ const LoginFaqPage = () => {
             >
               <p>
                 Yes, you can choose to sign in with your Staff ID. On the login
-                page, click the &ldquo;Sign in with Staff ID&ldquo; link. This will allow
-                you to enter your Staff ID, which will be automatically appended
-                with &ldquo;@example.com.my&ldquo;.
+                page, click the &ldquo;Sign in with Staff ID&ldquo; link. This
+                will allow you to enter your Staff ID, which will be
+                automatically appended with &ldquo;@example.com.my&ldquo;.
               </p>
             </AccordionTab>
 
@@ -97,11 +97,12 @@ const LoginFaqPage = () => {
               }
             >
               <p>
-                On the signup page, you&apos;ll see a toggle button labeled &ldquo;Sign up
-                with Staff ID&ldquo;. Click this button. The input field will change
-                to accept your Staff ID, and the label and placeholder text will
-                update accordingly. The &ldquo;@example.com.my&ldquo; domain will be
-                automatically added to your Staff ID when you proceed.
+                On the signup page, you&apos;ll see a toggle button labeled
+                &ldquo;Sign up with Staff ID&ldquo;. Click this button. The
+                input field will change to accept your Staff ID, and the label
+                and placeholder text will update accordingly. The
+                &ldquo;@example.com.my&ldquo; domain will be automatically added
+                to your Staff ID when you proceed.
               </p>
             </AccordionTab>
 
@@ -122,11 +123,12 @@ const LoginFaqPage = () => {
               }
             >
               <p>
-                If you forget your password, simply click on the &ldquo;Forgot your
-                password?&ldquo; on the login page. You&apos;ll need to enter your
-                registered email address, and instructions for resetting your
-                password will be sent to you. If you don’t see the email in your
-                inbox, be sure to check your Spam / Junk folder.
+                If you forget your password, simply click on the &ldquo;Forgot
+                your password?&ldquo; on the login page. You&apos;ll need to
+                enter your registered email address, and instructions for
+                resetting your password will be sent to you. If you don’t see
+                the email in your inbox, be sure to check your Spam / Junk
+                folder.
               </p>
             </AccordionTab>
             <AccordionTab
@@ -147,9 +149,9 @@ const LoginFaqPage = () => {
             >
               <p>
                 Your account may become locked after several failed login
-                attempts. To regain access, you can either click on &ldquo;Forgot your
-                password?&ldquo; to reset your credentials or contact your
-                administrator for further assistance.
+                attempts. To regain access, you can either click on
+                &ldquo;Forgot your password?&ldquo; to reset your credentials or
+                contact your administrator for further assistance.
               </p>
             </AccordionTab>
             <AccordionTab
@@ -170,9 +172,9 @@ const LoginFaqPage = () => {
             >
               <p>
                 If you don’t receive the verification code, check your Spam /
-                Junk folder. You can request a new code by clicking &ldquo;Resend code
-                / Resend email”. If the problem continues, contact your
-                administrator for further assistance.
+                Junk folder. You can request a new code by clicking
+                &ldquo;Resend code / Resend email”. If the problem continues,
+                contact your administrator for further assistance.
               </p>
             </AccordionTab>
             <AccordionTab

@@ -49,7 +49,7 @@ class EmailService {
     this.response = await this.onEmailSendingChecker();
     this.authStatus = this.response.authStatus;
     this.onVerification();
-    return {status : this.authStatus.status, message :  this.authStatus.message} ;
+    return { status: this.authStatus.status, message: this.authStatus.message };
   }
 }
 

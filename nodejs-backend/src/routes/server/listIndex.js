@@ -25,7 +25,9 @@ async function getQuotationIndex(request, response) {
         count: getIndex("QO", record.index),
         index: record.index,
       };
-      await request.appInstance.service("quotationsIndex").patch(record._id, result);
+      await request.appInstance
+        .service("quotationsIndex")
+        .patch(record._id, result);
     }
     return response.status(200).json(result);
   } catch (err) {
@@ -36,9 +38,7 @@ async function getQuotationIndex(request, response) {
 
 async function getDeliveryIndex(request, response) {
   try {
-    const indices = await request.appInstance
-      .service("deliveryIndex")
-      .find({});
+    const indices = await request.appInstance.service("deliveryIndex").find({});
     let result;
     if (indices && indices.data.length === 0) {
       result = {
@@ -54,7 +54,9 @@ async function getDeliveryIndex(request, response) {
         count: getIndex("DO", record.index),
         index: record.index,
       };
-      await request.appInstance.service("deliveryIndex").patch(record._id, result);
+      await request.appInstance
+        .service("deliveryIndex")
+        .patch(record._id, result);
     }
     return response.status(200).json(result);
   } catch (err) {

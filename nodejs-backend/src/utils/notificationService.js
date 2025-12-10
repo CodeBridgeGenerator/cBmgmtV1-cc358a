@@ -38,18 +38,17 @@ module.exports = {
   },
 };
 
-
 function createNotification(context, action, result = null) {
   const { app, params } = context;
 
   if (
-    context.path === 'notifications' ||
-    context.path === 'authentication' ||
-    context.path === 'audits' ||
-    context.path === 'documentStorages' ||
-    context.path === 'mailQues' ||
-    context.path === 'userInvites' ||
-    context.path === 'loginHistory'||
+    context.path === "notifications" ||
+    context.path === "authentication" ||
+    context.path === "audits" ||
+    context.path === "documentStorages" ||
+    context.path === "mailQues" ||
+    context.path === "userInvites" ||
+    context.path === "loginHistory" ||
     context.path === "users" ||
     context.path === "profiles" ||
     context.path === "userChangePassword" ||
@@ -57,7 +56,7 @@ function createNotification(context, action, result = null) {
     context.path === "branches" ||
     context.path === "roles" ||
     context.path === "positions" ||
-    context.path === "forgotPassword" 
+    context.path === "forgotPassword"
   ) {
     return context;
   }

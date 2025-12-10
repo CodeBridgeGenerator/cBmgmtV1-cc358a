@@ -179,8 +179,6 @@ const PositionsDataTable = ({
       );
     },
     JumpToPageInput: (options) => {
-      console.log("option", options);
-
       return (
         <div>
           <span>Page</span>
@@ -275,7 +273,8 @@ const PositionsDataTable = ({
   useEffect(() => {
     const fetchFieldPermissions = async () => {
       try {
-        const userPermissions = await client.service("permissionFields").find();
+        const userPermissions = await client.service("permissionFields").find({});
+        if(userPermissions?.data?.length === 0) return;
         const filteredPermissions = userPermissions.data.filter(
           (perm) =>
             perm.servicePermissionId.roleId === selectedUser &&
@@ -284,13 +283,13 @@ const PositionsDataTable = ({
         if (filteredPermissions.length > 0) {
           setFieldPermissions(filteredPermissions[0]);
         }
-        console.log("FieldPermissions", fieldPermissions);
+        // console.log("FieldPermissions", fieldPermissions);
       } catch (error) {
         console.error("Failed to fetch permissions", error);
       }
     };
 
-    fetchFieldPermissions();
+    // fetchFieldPermissions();
     if (selectedUser) {
       fetchFieldPermissions();
     }

@@ -8,7 +8,6 @@ const StartupWrapper = (props) => {
 
   useEffect(() => {
     // runs once
-    console.log(location);
     if (!regex.test(location.pathname)) {
       props.reAuth().catch((error) => {
         console.debug("error", error);

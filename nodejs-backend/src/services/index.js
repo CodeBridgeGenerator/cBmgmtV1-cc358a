@@ -1,4 +1,3 @@
-
 const crm = require("./crm/crm.service.js");
 const opportunity = require("./opportunity/opportunity.service.js");
 const contract = require("./contract/contract.service.js");
@@ -10,7 +9,6 @@ const firebase = require("./firebase/firebase.service.js");
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
-    
   app.configure(crm);
   app.configure(opportunity);
   app.configure(contract);
@@ -18,5 +16,5 @@ module.exports = function (app) {
   app.configure(backends);
   app.configure(frontends);
   app.configure(firebase);
-    // ~cb-add-configure-service-name~
+  // ~cb-add-configure-service-name~
 };

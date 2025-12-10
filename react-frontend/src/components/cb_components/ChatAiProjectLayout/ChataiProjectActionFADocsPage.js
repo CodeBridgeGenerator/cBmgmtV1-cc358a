@@ -55,7 +55,8 @@ const ChataiProjectActionFADocsPage = (props) => {
             style={{ minHeight: "100px" }}
           >
             {refFaDocs.map((doc, i) => (
-              <div key={i}
+              <div
+                key={i}
                 className="flex align-items-center font-bold"
                 style={{ minWidth: "200px", minHeight: "10px" }}
               >

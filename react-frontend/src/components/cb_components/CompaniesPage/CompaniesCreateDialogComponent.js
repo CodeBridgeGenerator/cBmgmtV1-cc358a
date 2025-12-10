@@ -19,9 +19,7 @@ const CompaniesCreateDialogComponent = (props) => {
   const [loading, setLoading] = useState(false);
   const urlParams = useParams();
 
-  const companyTypes = [
-    { label: "External", value: "external" },
-  ];
+  const companyTypes = [{ label: "External", value: "external" }];
 
   useEffect(() => {
     let init = { companyNo: "", isdefault: false };

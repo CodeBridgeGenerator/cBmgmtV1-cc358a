@@ -1,8 +1,9 @@
 const IORedis = require("ioredis");
 const redisClient = new IORedis({
   maxRetriesPerRequest: null,
-  host: "redis",
-  port: 6379,
+  // enable for docker composer
+  // host: "redis",
+  // port: 6379,
   //   password: null,
   //   tls: {
   //   ca: fs.readFileSync('LOCAL/PATH/TO/rackspace-ca-2016.pem')

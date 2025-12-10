@@ -18,7 +18,7 @@ module.exports = function (app) {
   // Get our initialized service so that we can register hooks
   const service = app.service("backends");
 
-  // Get the schema of the collections 
+  // Get the schema of the collections
   app.get("/backendsSchema", function (request, response) {
     const schema = createModel(app).schema.tree;
     const excludes = ["__v", "id"];
@@ -35,7 +35,9 @@ module.exports = function (app) {
             schema[key].type = "Mixed";
           else schema[key].type = "undefined";
         } else if (Array.isArray(schema[key].type)) {
-          schema[key].description ? schema[key].description += "isArray" : schema[key].description = "isArray";
+          schema[key].description
+            ? (schema[key].description += "isArray")
+            : (schema[key].description = "isArray");
           if (typeof schema[key].type[0] === "function") {
             if (schema[key].type[0] === String) schema[key].type = "String";
             else if (schema[key].type[0] === Number)

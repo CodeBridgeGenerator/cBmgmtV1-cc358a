@@ -23,6 +23,7 @@ import AppSideBar from "./components/Layouts/appSideBar/AppSideBar";
 import ProjectSideBarLayout from "./components/Layouts/ProjectSideBarLayout";
 import { excludeLocations } from "./utils";
 import { classNames } from "primereact/utils";
+import PageWrapper from "./MyRouter/wrappers/PageWrapper";
 
 const App = ({ isLoggedIn }) => {
   const location = useLocation();
@@ -65,6 +66,7 @@ const App = ({ isLoggedIn }) => {
       <LoadingWrapper />
       <ToastWrapper />
       <StartupWrapper />
+      <PageWrapper />
 
       <AppConfigStatic
         rippleEffect={true}

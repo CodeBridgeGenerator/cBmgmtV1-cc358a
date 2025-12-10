@@ -169,42 +169,48 @@ const AppSideBar = (props) => {
                   menuKey: "positions",
                   to: "/positions",
                 },
-
                 {
-                  icon: <DepartmentAdmin />,
-                  label: "Department admins",
-                  menuKey: "department-admin",
-                  to: "/departmentAdmin",
-                },
-                {
-                  icon: <HeadOfDept />,
-                  label: "Head of departments",
-                  menuKey: "head-of-department",
-                  to: "/departmentHOD",
-                },
-                {
-                  icon: <HeadOfSection />,
-                  label: "Head of sections",
-                  menuKey: "haed-of-section",
-                  to: "/departmentHOS",
-                },
-                {
-                  label: "Superiors",
-                  icon: <Superiors />,
-                  menuKey: "superiors",
-                  to: "/Superior",
-                },
-                {
-                  label: "Employees",
-                  icon: <Employees />,
-                  menuKey: "employees",
-                  to: "/Employees",
-                },
-                {
-                  label: "Staff infos",
-                  icon: <StaffInfo />,
-                  menuKey: "staff-info",
-                  to: "/Staffinfo",
+                  icon: <Home />,
+                  label: "Office",
+                  menuKey: "office",
+                  menus: [
+                    {
+                      icon: <DepartmentAdmin />,
+                      label: "Department Admins",
+                      menuKey: "department-admin",
+                      to: "/departmentAdmin",
+                    },
+                    {
+                      icon: <HeadOfDept />,
+                      label: "Head of departments",
+                      menuKey: "head-of-department",
+                      to: "/departmentHOD",
+                    },
+                    {
+                      icon: <HeadOfSection />,
+                      label: "Head of sections",
+                      menuKey: "haed-of-section",
+                      to: "/departmentHOS",
+                    },
+                    {
+                      label: "Superiors",
+                      icon: <Superiors />,
+                      menuKey: "superiors",
+                      to: "/superior",
+                    },
+                    {
+                      label: "Employees",
+                      icon: <Employees />,
+                      menuKey: "employees",
+                      to: "/employees",
+                    },
+                    {
+                      label: "Staff info",
+                      icon: <StaffInfo />,
+                      menuKey: "staff-info",
+                      to: "/staffinfo",
+                    },
+                  ],
                 },
                 {
                   icon: <Permissions />,

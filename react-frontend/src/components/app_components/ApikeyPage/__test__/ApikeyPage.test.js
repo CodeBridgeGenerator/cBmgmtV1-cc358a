@@ -9,14 +9,14 @@ import { Provider } from "react-redux";
 import * as models from "../../../models";
 
 test("renders apikey page", async () => {
-    const store = init({ models });
-    render(
-        <Provider store={store}>
-            <MemoryRouter>
-                <ApikeyPage />
-            </MemoryRouter>
-        </Provider>
-    );
-    expect(screen.getByRole("apikey-datatable")).toBeInTheDocument();
-    expect(screen.getByRole("apikey-add-button")).toBeInTheDocument();
+  const store = init({ models });
+  render(
+    <Provider store={store}>
+      <MemoryRouter>
+        <ApikeyPage />
+      </MemoryRouter>
+    </Provider>,
+  );
+  expect(screen.getByRole("apikey-datatable")).toBeInTheDocument();
+  expect(screen.getByRole("apikey-add-button")).toBeInTheDocument();
 });

@@ -32,28 +32,28 @@ const fcmService = require("./routes/fcm");
 const app = express(feathers());
 // Load app socketio
 app.configure(
-    socketio((io) => {
-        io.on("connection", (socket) => {
-            console.debug(socket);
-        });
+  socketio((io) => {
+    io.on("connection", (socket) => {
+      console.debug(socket);
+    });
 
-        // Registering Socket.io middleware
-        io.use(function (socket, next) {
-            // Exposing a request property to services and hooks
-            socket.feathers.referrer = socket.request.referrer;
-            // console.debug(socket);
-            next();
-        });
-        io.sockets.setMaxListeners(555);
-    })
+    // Registering Socket.io middleware
+    io.use(function (socket, next) {
+      // Exposing a request property to services and hooks
+      socket.feathers.referrer = socket.request.referrer;
+      // console.debug(socket);
+      next();
+    });
+    io.sockets.setMaxListeners(555);
+  }),
 );
 // Load app configuration
 app.configure(configuration());
 // Enable security, CORS, compression, favicon and body parsing
 app.use(
-    helmet({
-        contentSecurityPolicy: false
-    })
+  helmet({
+    contentSecurityPolicy: false,
+  }),
 );
 app.use(cors());
 app.use(compress());

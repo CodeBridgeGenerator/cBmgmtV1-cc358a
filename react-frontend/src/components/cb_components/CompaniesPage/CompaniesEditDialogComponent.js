@@ -19,9 +19,7 @@ const CompaniesCreateDialogComponent = (props) => {
   const [loading, setLoading] = useState(false);
   const urlParams = useParams();
 
-  const companyTypes = [
-    { label: "External", value: "external" },
-  ];
+  const companyTypes = [{ label: "External", value: "external" }];
 
   useEffect(() => {
     set_entity(props.entity);
@@ -119,7 +117,7 @@ const CompaniesCreateDialogComponent = (props) => {
             )}
           </small>
         </div>
- 
+
         <div className="col-12 md:col-6 field">
           <span className="align-items-center">
             <label htmlFor="companyNo">Company no:</label>

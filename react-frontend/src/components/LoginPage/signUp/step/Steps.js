@@ -11,7 +11,8 @@ const Steps = (props) => {
           const lastStep = index === steps.length - 1;
           const isCompletedStep = index + 1 < currentStep;
           return (
-            <div key={index}
+            <div
+              key={index}
               className={classNames(
                 "flex items-center",
                 !lastStep ? "flex-auto" : "flex-initial",

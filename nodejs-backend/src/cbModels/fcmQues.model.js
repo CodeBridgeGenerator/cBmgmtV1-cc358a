@@ -1,6 +1,6 @@
 module.exports = function (app) {
-  const modelName = 'fcm_ques';
-  const mongooseClient = app.get('mongooseClient');
+  const modelName = "fcm_ques";
+  const mongooseClient = app.get("mongooseClient");
   const { Schema } = mongooseClient;
 
   // Define the schema for the FCM Android-specific payload
@@ -80,11 +80,11 @@ module.exports = function (app) {
     {
       payload: {
         notification: {
-          title: { type: String, description: 'Notification title' },
-          body: { type: String, description: 'Notification body' },
+          title: { type: String, description: "Notification title" },
+          body: { type: String, description: "Notification body" },
           image: {
             type: String,
-            description: 'Notification image URL',
+            description: "Notification image URL",
             nullable: true,
           },
         },

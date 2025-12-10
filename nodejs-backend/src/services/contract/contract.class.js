@@ -1,5 +1,3 @@
 const { Service } = require("feathers-mongoose");
 
-exports.Contract = class Contract extends Service {
-  
-};
+exports.Contract = class Contract extends Service {};

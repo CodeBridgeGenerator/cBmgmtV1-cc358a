@@ -24,13 +24,13 @@ export function decryptData(ciphertext) {
 export const decryptResponseClientHook = async (context) => {
   if (context.result && context.result.encrypted) {
     const encrypted = context.result.encrypted;
-    console.debug("Encrypted Data:", encrypted);
+    // console.debug("Encrypted Data:", encrypted);
 
     // Decrypt the encrypted data
     const decrypted = decryptData(encrypted);
 
     if (decrypted) {
-      console.debug("Decrypted Data:", decrypted);
+      // console.debug("Decrypted Data:", decrypted);
       context.result = decrypted; 
     }
   } else {

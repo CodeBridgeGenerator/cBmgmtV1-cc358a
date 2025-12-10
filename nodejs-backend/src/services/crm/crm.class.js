@@ -1,5 +1,3 @@
 const { Service } = require("feathers-mongoose");
 
-exports.Crm = class Crm extends Service {
-  
-};
+exports.Crm = class Crm extends Service {};
