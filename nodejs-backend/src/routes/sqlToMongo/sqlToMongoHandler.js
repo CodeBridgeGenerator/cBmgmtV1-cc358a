@@ -47,6 +47,321 @@ const upload = multer({
   }
 });
 
+// SQL Server to MongoDB type mapping
+const SQL_TYPE_MAPPING = {
+  // String types
+  'char': 'String',
+  'varchar': 'String',
+  'text': 'String',
+  'nchar': 'String',
+  'nvarchar': 'String',
+  'ntext': 'String',
+  
+  // Numeric types
+  'int': 'Number',
+  'bigint': 'Number',
+  'smallint': 'Number',
+  'tinyint': 'Number',
+  'decimal': 'Number',
+  'numeric': 'Number',
+  'float': 'Number',
+  'real': 'Number',
+  'money': 'Number',
+  'smallmoney': 'Number',
+  
+  // Date/Time types
+  'date': 'Date',
+  'datetime': 'Date',
+  'datetime2': 'Date',
+  'smalldatetime': 'Date',
+  'time': 'String', // MongoDB doesn't have Time type, store as String
+  
+  // Boolean types
+  'bit': 'Boolean',
+  
+  // Binary types
+  'binary': 'Buffer',
+  'varbinary': 'Buffer',
+  'image': 'Buffer',
+  
+  // Other types
+  'uniqueidentifier': 'String', // UUID as string
+  'timestamp': 'Buffer', // RowVersion as buffer
+  'xml': 'String',
+  'json': 'String',
+};
+
+// SQL Server to Component mapping (for UI)
+const SQL_TO_COMPONENT_MAPPING = {
+  // String types
+  'char': 'p_inputtext',
+  'varchar': 'p_inputtext',
+  'text': 'p_textarea',
+  'nchar': 'p_inputtext',
+  'nvarchar': 'p_inputtext',
+  'ntext': 'p_textarea',
+  
+  // Numeric types
+  'int': 'p_inputnumber',
+  'bigint': 'p_inputnumber',
+  'smallint': 'p_inputnumber',
+  'tinyint': 'p_inputnumber',
+  'decimal': 'p_inputnumber',
+  'numeric': 'p_inputnumber',
+  'float': 'p_inputnumber',
+  'real': 'p_inputnumber',
+  'money': 'p_inputnumber',
+  'smallmoney': 'p_inputnumber',
+  
+  // Date/Time types
+  'date': 'p_calendar',
+  'datetime': 'p_calendar',
+  'datetime2': 'p_calendar',
+  'smalldatetime': 'p_calendar',
+  'time': 'p_inputtext',
+  
+  // Boolean types
+  'bit': 'p_checkbox',
+  
+  // Binary types
+  'binary': 'p_fileupload',
+  'varbinary': 'p_fileupload',
+  'image': 'p_fileupload',
+  
+  // Other types
+  'uniqueidentifier': 'p_inputtext',
+  'timestamp': 'p_fileupload',
+  'xml': 'p_textarea',
+  'json': 'p_textarea',
+};
+
+// Function to analyze SQL Server schema
+async function analyzeTableSchema(pool, dbName, tableName) {
+  try {
+    console.log(`Analyzing schema for table: ${tableName}`);
+    
+    // Get column information
+    const columnsQuery = `
+      SELECT 
+        c.COLUMN_NAME,
+        c.DATA_TYPE,
+        c.CHARACTER_MAXIMUM_LENGTH,
+        c.NUMERIC_PRECISION,
+        c.NUMERIC_SCALE,
+        c.IS_NULLABLE,
+        CASE WHEN tc.CONSTRAINT_TYPE = 'PRIMARY KEY' THEN 1 ELSE 0 END AS IS_PRIMARY_KEY,
+        CASE WHEN COLUMNPROPERTY(OBJECT_ID(c.TABLE_SCHEMA + '.' + c.TABLE_NAME), c.COLUMN_NAME, 'IsIdentity') = 1 THEN 1 ELSE 0 END AS IS_IDENTITY,
+        CASE WHEN ic.CONSTRAINT_NAME IS NOT NULL THEN 1 ELSE 0 END AS IS_UNIQUE,
+        CASE WHEN fkc.CONSTRAINT_NAME IS NOT NULL THEN 1 ELSE 0 END AS IS_FOREIGN_KEY,
+        cc.CHECK_CLAUSE
+      FROM [${dbName}].INFORMATION_SCHEMA.COLUMNS c
+      LEFT JOIN [${dbName}].INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu 
+        ON c.TABLE_CATALOG = kcu.TABLE_CATALOG 
+        AND c.TABLE_SCHEMA = kcu.TABLE_SCHEMA 
+        AND c.TABLE_NAME = kcu.TABLE_NAME 
+        AND c.COLUMN_NAME = kcu.COLUMN_NAME
+      LEFT JOIN [${dbName}].INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc 
+        ON kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME 
+        AND tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+      LEFT JOIN [${dbName}].INFORMATION_SCHEMA.TABLE_CONSTRAINTS uc 
+        ON kcu.CONSTRAINT_NAME = uc.CONSTRAINT_NAME 
+        AND uc.CONSTRAINT_TYPE = 'UNIQUE'
+      LEFT JOIN [${dbName}].INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ic 
+        ON kcu.CONSTRAINT_NAME = ic.CONSTRAINT_NAME
+      LEFT JOIN [${dbName}].INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc 
+        ON kcu.CONSTRAINT_NAME = rc.CONSTRAINT_NAME
+      LEFT JOIN [${dbName}].INFORMATION_SCHEMA.KEY_COLUMN_USAGE fkc 
+        ON rc.UNIQUE_CONSTRAINT_NAME = fkc.CONSTRAINT_NAME
+      LEFT JOIN [${dbName}].INFORMATION_SCHEMA.CHECK_CONSTRAINTS cc 
+        ON kcu.CONSTRAINT_NAME = cc.CONSTRAINT_NAME
+      WHERE c.TABLE_NAME = '${tableName}'
+      ORDER BY c.ORDINAL_POSITION
+    `;
+    
+    const result = await pool.request().query(columnsQuery);
+    
+    const schemaFields = [];
+    
+    for (const column of result.recordset) {
+      const sqlType = column.DATA_TYPE.toLowerCase();
+      const mongoType = SQL_TYPE_MAPPING[sqlType] || 'String';
+      const component = SQL_TO_COMPONENT_MAPPING[sqlType] || 'p_inputtext';
+      
+      // Determine if field should be displayed
+      const isPrimaryKey = column.IS_PRIMARY_KEY === 1;
+      const isIdentity = column.IS_IDENTITY === 1;
+      const isSystemField = column.COLUMN_NAME.toLowerCase().includes('id') && isPrimaryKey;
+      
+      // Field configuration
+      const fieldConfig = {
+        fieldName: column.COLUMN_NAME,
+        type: mongoType,
+        unique: column.IS_UNIQUE === 1,
+        lowercase: false,
+        uppercase: false,
+        trim: sqlType.includes('char') || sqlType.includes('text'),
+        display: !isSystemField, // Don't display ID fields by default
+        displayOnEdit: !isSystemField,
+        displayOnSingle: !isSystemField,
+        displayOnDataTable: !isSystemField,
+        creatable: !isSystemField && !isIdentity,
+        editable: !isSystemField && !isIdentity,
+        sortable: true,
+        required: column.IS_NULLABLE === 'NO' && !isIdentity,
+        description: sqlType,
+        component: component,
+        label: column.COLUMN_NAME.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+        isMultiple: false,
+        enum: [],
+        index: column.IS_PRIMARY_KEY === 1 || column.IS_UNIQUE === 1,
+        autocomplete: false,
+        lazy: false,
+        reverse: false,
+        morph: false,
+        through: false,
+        args: [],
+        auditing: false,
+        warehousing: false,
+        searchable: true,
+        mode: mongoType === 'Number' ? 'currency' : 'default',
+        currency: {
+          currency: "MYR",
+          locale: "en-US"
+        },
+        reference: {
+          identifierFieldName: []
+        }
+      };
+      
+      // Set min/max based on SQL type
+      if (mongoType === 'String' && column.CHARACTER_MAXIMUM_LENGTH) {
+        fieldConfig.max = column.CHARACTER_MAXIMUM_LENGTH;
+        fieldConfig.min = 1;
+      }
+      
+      // For numeric types
+      if (mongoType === 'Number' && column.NUMERIC_PRECISION) {
+        fieldConfig.min = 0;
+        fieldConfig.max = Math.pow(10, column.NUMERIC_PRECISION) - 1;
+      }
+      
+      // Handle special cases
+      if (column.COLUMN_NAME.toLowerCase() === 'email') {
+        fieldConfig.component = 'p_inputtext';
+        fieldConfig.lowercase = true;
+        fieldConfig.unique = true;
+      }
+      
+      if (column.COLUMN_NAME.toLowerCase().includes('password')) {
+        fieldConfig.displayOnEdit = false;
+        fieldConfig.displayOnDataTable = false;
+        fieldConfig.editable = false;
+        fieldConfig.component = 'p_password';
+      }
+      
+      if (column.COLUMN_NAME.toLowerCase().includes('date') || column.COLUMN_NAME.toLowerCase().includes('time')) {
+        fieldConfig.component = 'p_calendar';
+      }
+      
+      if (column.COLUMN_NAME.toLowerCase().includes('active') || 
+          column.COLUMN_NAME.toLowerCase().includes('status') ||
+          column.COLUMN_NAME.toLowerCase().includes('is')) {
+        fieldConfig.type = 'Boolean';
+        fieldConfig.component = 'p_checkbox';
+      }
+      
+      schemaFields.push(fieldConfig);
+    }
+    
+    return schemaFields;
+  } catch (err) {
+    console.error(`Error analyzing schema for table ${tableName}:`, err);
+    return [];
+  }
+}
+
+// Function to create Config.json structure
+function createConfigJson(tables, projectName = 'cbmgmtv1') {
+  const config = {
+    projectName: projectName,
+    description: "Migrated from SQL Server",
+    auth: "jwt",
+    database: {
+      _id: "6718ba9bc686b63c57a218e6",
+      type: "database",
+      name: "mongodb",
+      label: "MongoDB",
+      appName: "mongodb-database",
+      pathToLogo: {
+        s: "/assets/applications_logos/mongodb-s.png",
+        l: "/assets/applications_logos/mongodb.png"
+      },
+      configFileRelativePath: null,
+      disabled: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    stack: [
+      {
+        appName: "nodejs-backend",
+        environments: [null, null, null, null, null],
+        pathToLogo: {
+          s: "/assets/applications_logos/nodejs-s.png",
+          l: "/assets/applications_logos/nodejs.png"
+        },
+        type: "backend",
+        name: "nodejs",
+        label: "Node.js Express Feathers.js",
+        versions: []
+      },
+      {
+        appName: "react-frontend",
+        environments: [null, null, null, null, null],
+        pathToLogo: {
+          s: "/assets/applications_logos/react-s.png",
+          l: "/assets/applications_logos/react.png"
+        },
+        type: "frontend",
+        name: "react",
+        label: "React JavaScript",
+        versions: []
+      }
+    ],
+    services: []
+  };
+  
+  // Add each table as a service
+  for (const table of tables) {
+    const serviceName = table.tableName.toLowerCase();
+    const displayName = table.tableName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+    
+    const service = {
+      serviceName: serviceName,
+      databaseName: serviceName,
+      displayName: displayName,
+      icon: "pi pi-cog",
+      create: true,
+      edit: true,
+      delete: true,
+      single: true,
+      sidebar: [],
+      schemaList: table.schemaFields,
+      layout: true,
+      seeder: [],
+      skip: false,
+      downloadable: true,
+      uploadable: false,
+      sharable: false,
+      ai: false,
+      warehouse: false
+    };
+    
+    config.services.push(service);
+  }
+  
+  return config;
+}
+
 // Export multer middleware
 const uploadMiddleware = upload.single('bakFile');
 
@@ -278,50 +593,82 @@ const migrateBakToMongo = async (req, res) => {
       });
     }
 
-    // Step 7: Migrate each table
+    // Step 7: Analyze schema and create Config.json
+    console.log("Analyzing table schemas...");
+    const tableSchemas = [];
+    
+    for (const tableName of tables) {
+      const schemaFields = await analyzeTableSchema(pool, process.env.SQL_DB_NAME || 'RestoredDB', tableName);
+      tableSchemas.push({
+        tableName: tableName,
+        schemaFields: schemaFields
+      });
+      console.log(`Analyzed schema for ${tableName}: ${schemaFields.length} fields`);
+    }
+    
+    // Create Config.json
+    const configJson = createConfigJson(tableSchemas, process.env.PROJECT_NAME || 'cBmgmtV1');
+    
+    // Step 8: Migrate each table
     const migrationResults = [];
     const mongoDbName = process.env.MONGO_DB || 'migrated_data';
     const mongoDb = mongoClient.db(mongoDbName);
     
     console.log(`Migrating to MongoDB database: ${mongoDbName}`);
     
-    for (const table of tables) {
+    for (const table of tableSchemas) {
+      const tableName = table.tableName;
       try {
-        console.log(`Migrating table: ${table}`);
+        console.log(`Migrating table: ${tableName}`);
         
         // Get data from SQL Server
         const dbName = process.env.SQL_DB_NAME || 'RestoredDB';
-        const rowsResult = await pool.request().query(`SELECT * FROM [${dbName}].[dbo].[${table}]`);
+        const rowsResult = await pool.request().query(`SELECT * FROM [${dbName}].[dbo].[${tableName}]`);
         const rows = rowsResult.recordset;
         
         if (rows.length > 0) {
-          console.log(`Found ${rows.length} rows in table '${table}'`);
+          console.log(`Found ${rows.length} rows in table '${tableName}'`);
           
           // Prepare data for MongoDB - handle special types
           const mongoDocs = rows.map((row, index) => {
-            const doc = { _id: index + 1 }; // Add an _id for MongoDB
+            const doc = {};
             Object.keys(row).forEach(key => {
               const value = row[key];
               
-              // Handle different data types
+              // Handle different data types based on schema analysis
+              const fieldSchema = table.schemaFields.find(f => f.fieldName === key);
+              const fieldType = fieldSchema ? fieldSchema.type : 'String';
+              
               if (value === null || value === undefined) {
                 doc[key.toLowerCase()] = null;
-              } else if (value instanceof Date) {
+              } else if (fieldType === 'Date' && value instanceof Date) {
                 doc[key.toLowerCase()] = value;
+              } else if (fieldType === 'Boolean') {
+                // Convert bit/tinyint to boolean
+                doc[key.toLowerCase()] = Boolean(value);
+              } else if (fieldType === 'Number') {
+                doc[key.toLowerCase()] = Number(value);
+              } else if (fieldType === 'Buffer' && Buffer.isBuffer(value)) {
+                doc[key.toLowerCase()] = value.toString('base64');
               } else if (typeof value === 'object' && value instanceof sql.TYPES.NVarChar) {
                 doc[key.toLowerCase()] = value.toString();
-              } else if (Buffer.isBuffer(value)) {
-                // Convert binary data to base64
-                doc[key.toLowerCase()] = value.toString('base64');
+              } else if (typeof value === 'string') {
+                doc[key.toLowerCase()] = value.trim();
               } else {
                 doc[key.toLowerCase()] = value;
               }
             });
+            
+            // Add MongoDB _id if not present
+            if (!doc._id) {
+              doc._id = index + 1;
+            }
+            
             return doc;
           });
           
           // Insert into MongoDB
-          const collectionName = table.toLowerCase();
+          const collectionName = tableName.toLowerCase();
           const collection = mongoDb.collection(collectionName);
           
           // Clear existing data if any
@@ -332,32 +679,38 @@ const migrateBakToMongo = async (req, res) => {
           const insertResult = await collection.insertMany(mongoDocs);
           
           migrationResults.push({
-            table: table,
+            table: tableName,
             rowsMigrated: rows.length,
             success: true,
-            mongoCollection: collectionName
+            mongoCollection: collectionName,
+            fields: table.schemaFields.length
           });
           
           console.log(`✓ Migrated ${rows.length} rows to MongoDB collection '${collectionName}'`);
         } else {
           migrationResults.push({
-            table: table,
+            table: tableName,
             rowsMigrated: 0,
             success: true,
-            message: "Table was empty"
+            message: "Table was empty",
+            fields: table.schemaFields.length
           });
-          console.log(`○ Table '${table}' is empty, skipping`);
+          console.log(`○ Table '${tableName}' is empty, skipping`);
         }
       } catch (tableErr) {
-        console.error(`✗ Error migrating table '${table}':`, tableErr.message);
+        console.error(`✗ Error migrating table '${tableName}':`, tableErr.message);
         migrationResults.push({
-          table: table,
+          table: tableName,
           success: false,
           error: tableErr.message
         });
       }
     }
 
+    // Step 9: Prepare Config.json for download (do NOT save to file system)
+    const configJsonString = JSON.stringify(configJson, null, 2);
+    const configFileName = `migration-config-${Date.now()}.json`;
+    
     // Clean up
     if (pool) {
       await pool.close();
@@ -375,9 +728,10 @@ const migrateBakToMongo = async (req, res) => {
       console.log("Cleaned up uploaded backup file");
     }
     
-    // Send success response
+    // Send success response with config data
     const successfulMigrations = migrationResults.filter(r => r.success).length;
     const totalRows = migrationResults.reduce((sum, r) => sum + (r.rowsMigrated || 0), 0);
+    const totalFields = migrationResults.reduce((sum, r) => sum + (r.fields || 0), 0);
     
     const response = {
       success: true, 
@@ -387,7 +741,14 @@ const migrateBakToMongo = async (req, res) => {
         successfulTables: successfulMigrations,
         failedTables: tables.length - successfulMigrations,
         totalRowsMigrated: totalRows,
+        totalFieldsAnalyzed: totalFields,
         mongoDatabase: mongoDbName
+      },
+      config: {
+        fileName: configFileName,
+        data: configJsonString, // Send config data directly in response
+        services: configJson.services.length,
+        downloadReady: true
       },
       details: migrationResults,
       timestamp: new Date().toISOString()

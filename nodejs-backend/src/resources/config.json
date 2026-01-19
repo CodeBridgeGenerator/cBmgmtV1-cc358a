@@ -1,7 +1,7 @@
 {
-  "projectName": "cBmgmtV1",
+  "projectName": "cbmgmtv1",
   "description": "CRM, Backend, fronted, Opp, Firebase",
-  "auth": null,
+  "auth": "jwt",
   "database": {
     "_id": "6718ba9bc686b63c57a218e6",
     "type": "database",
