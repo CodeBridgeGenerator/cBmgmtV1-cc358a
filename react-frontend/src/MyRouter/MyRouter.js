@@ -18,6 +18,7 @@ import DashboardUserManagement from "../components/Dashboard/DashboardUserManage
 import DashboardGenAi from "../components/Dashboard/DashboardGenAi";
 import DashboardHRControls from "../components/Dashboard/DashboardHRControls";
 import DashboardWelcome from "../components/Dashboard/DashboardWelcome";
+import MigrationPage from "../components/mongodb_component/MigrationPage";
 import Account from "../components/cb_components/Account/Account";
 import CBRouter from "./CBRouter";
 import AppRouter from "./AppRouter";
@@ -105,7 +106,7 @@ const MyRouter = (props) => {
           exact
           element={<DashboardUserManagement />}
         />
-
+        <Route path="/migration" exact element={<MigrationPage />} />
         <Route
           path="/errorLogs"
           exact

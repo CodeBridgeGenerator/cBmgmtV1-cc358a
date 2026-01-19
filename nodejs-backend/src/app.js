@@ -28,6 +28,7 @@ const redisCache = require("feathers-redis-cache");
 const redisClient = require("./cbServices/redis/config");
 const s3uploader = require("./routes/upload");
 const fcmService = require("./routes/fcm");
+const sqlToMongo = require("./routes/sqlToMongo");
 
 const app = express(feathers());
 // Load app socketio
@@ -74,6 +75,7 @@ app.configure(redisCache.services({ pathPrefix: "/cache" }));
 // Set up our services (see `services/index.js`)
 app.configure(services);
 app.configure(cbServices);
+app.configure(sqlToMongo);
 // Set up event channels (see channels.js)
 app.configure(channels);
 // Set up job queues

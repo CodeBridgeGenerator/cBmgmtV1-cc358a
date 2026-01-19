@@ -97,6 +97,12 @@ const AppSideBar = (props) => {
                   menuKey: "mongoProjects",
                   to: "/mongo/groups",
                 },
+                 {
+                  icon: <Home />,
+                  label: "Migration SQL to mongodb",
+                  menuKey: "migration",
+                  to: "/migration",
+                },
               ]}
             />
             <AppMenu
