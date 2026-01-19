@@ -135,6 +135,129 @@ const SQL_TO_COMPONENT_MAPPING = {
   'json': 'p_textarea',
 };
 
+// Helper function to convert SQL field names to camelCase
+function toCamelCase(str) {
+  return str
+    .replace(/[_\-]/g, ' ') // Replace underscores and hyphens with spaces
+    .replace(/\s+(.)/g, (_, chr) => chr.toUpperCase()) // Capitalize words
+    .replace(/\s/g, '') // Remove spaces
+    .replace(/^(.)/, (chr) => chr.toLowerCase()); // Lowercase first letter
+}
+
+// Helper function to convert SQL table names to camelCase for collection names
+function tableNameToCamelCase(tableName) {
+  return tableName
+    .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+    .trim()
+    .replace(/\s+/g, ' ') // Normalize spaces
+    .split(' ')
+    .map((word, index) => 
+      index === 0 
+        ? word.toLowerCase() // First word lowercase
+        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() // Capitalize others
+    )
+    .join('');
+}
+
+// Function to convert SQL Server value to proper MongoDB/JavaScript type
+function convertSqlValue(value, sqlType, fieldName = '') {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  
+  const sqlTypeLower = sqlType.toLowerCase();
+  
+  // Handle decimal/numeric types (preserve as Number)
+  if (sqlTypeLower === 'decimal' || sqlTypeLower === 'numeric') {
+    // For decimal fields, preserve the exact value
+    if (typeof value === 'number') {
+      return value;
+    } else if (typeof value === 'string') {
+      const num = parseFloat(value);
+      return isNaN(num) ? 0 : num;
+    } else if (value && typeof value === 'object' && value.value !== undefined) {
+      // Handle SQL Server decimal objects
+      return parseFloat(value.value) || 0;
+    }
+    return Number(value) || 0;
+  }
+  
+  // Handle integer types
+  if (sqlTypeLower === 'int' || sqlTypeLower === 'bigint' || sqlTypeLower === 'smallint' || sqlTypeLower === 'tinyint') {
+    return Number(value);
+  }
+  
+  // Handle float/real types
+  if (sqlTypeLower === 'float' || sqlTypeLower === 'real') {
+    return Number(value);
+  }
+  
+  // Handle money types
+  if (sqlTypeLower === 'money' || sqlTypeLower === 'smallmoney') {
+    return Number(value);
+  }
+  
+  // Handle bit type (Boolean)
+  if (sqlTypeLower === 'bit') {
+    return Boolean(value);
+  }
+  
+  // Handle date/time types
+  if (sqlTypeLower === 'date' || sqlTypeLower === 'datetime' || sqlTypeLower === 'datetime2' || sqlTypeLower === 'smalldatetime') {
+    if (value instanceof Date) {
+      return value;
+    } else if (typeof value === 'string') {
+      const date = new Date(value);
+      return isNaN(date.getTime()) ? null : date;
+    } else if (value && typeof value === 'object' && value.value !== undefined) {
+      return new Date(value.value);
+    }
+    return value;
+  }
+  
+  // Handle time type (store as string)
+  if (sqlTypeLower === 'time') {
+    return String(value);
+  }
+  
+  // Handle binary types
+  if (sqlTypeLower === 'binary' || sqlTypeLower === 'varbinary' || sqlTypeLower === 'image') {
+    if (Buffer.isBuffer(value)) {
+      return value.toString('base64');
+    }
+    return String(value);
+  }
+  
+  // Handle timestamp (rowversion)
+  if (sqlTypeLower === 'timestamp') {
+    if (Buffer.isBuffer(value)) {
+      return value.toString('base64');
+    }
+    return String(value);
+  }
+  
+  // Handle string types
+  if (sqlTypeLower === 'char' || sqlTypeLower === 'varchar' || sqlTypeLower === 'text' ||
+      sqlTypeLower === 'nchar' || sqlTypeLower === 'nvarchar' || sqlTypeLower === 'ntext' ||
+      sqlTypeLower === 'xml' || sqlTypeLower === 'json' || sqlTypeLower === 'uniqueidentifier') {
+    if (typeof value === 'string') {
+      return value.trim();
+    } else if (value && typeof value === 'object' && value.toString) {
+      return value.toString().trim();
+    }
+    return String(value).trim();
+  }
+  
+  // Default: convert to string
+  if (typeof value === 'string') {
+    return value.trim();
+  } else if (value && typeof value === 'object' && value.toString) {
+    return value.toString().trim();
+  }
+  
+  return value;
+}
+
 // Function to analyze SQL Server schema
 async function analyzeTableSchema(pool, dbName, tableName) {
   try {
@@ -192,9 +315,15 @@ async function analyzeTableSchema(pool, dbName, tableName) {
       const isIdentity = column.IS_IDENTITY === 1;
       const isSystemField = column.COLUMN_NAME.toLowerCase().includes('id') && isPrimaryKey;
       
+      // Convert field name to camelCase
+      const originalFieldName = column.COLUMN_NAME;
+      const camelCaseFieldName = toCamelCase(originalFieldName);
+      
       // Field configuration
       const fieldConfig = {
-        fieldName: column.COLUMN_NAME,
+        fieldName: camelCaseFieldName, // Use camelCase in config
+        originalFieldName: originalFieldName, // Keep original for reference
+        originalDataType: sqlType, // Keep original SQL data type
         type: mongoType,
         unique: column.IS_UNIQUE === 1,
         lowercase: false,
@@ -245,7 +374,7 @@ async function analyzeTableSchema(pool, dbName, tableName) {
         fieldConfig.max = Math.pow(10, column.NUMERIC_PRECISION) - 1;
       }
       
-      // Handle special cases
+      // Handle special UI components based on field name (not type!)
       if (column.COLUMN_NAME.toLowerCase() === 'email') {
         fieldConfig.component = 'p_inputtext';
         fieldConfig.lowercase = true;
@@ -259,14 +388,13 @@ async function analyzeTableSchema(pool, dbName, tableName) {
         fieldConfig.component = 'p_password';
       }
       
-      if (column.COLUMN_NAME.toLowerCase().includes('date') || column.COLUMN_NAME.toLowerCase().includes('time')) {
+      // Only set calendar component for actual date types
+      if (sqlType === 'date' || sqlType === 'datetime' || sqlType === 'datetime2' || sqlType === 'smalldatetime') {
         fieldConfig.component = 'p_calendar';
       }
       
-      if (column.COLUMN_NAME.toLowerCase().includes('active') || 
-          column.COLUMN_NAME.toLowerCase().includes('status') ||
-          column.COLUMN_NAME.toLowerCase().includes('is')) {
-        fieldConfig.type = 'Boolean';
+      // Only set checkbox component for actual bit type
+      if (sqlType === 'bit') {
         fieldConfig.component = 'p_checkbox';
       }
       
@@ -332,7 +460,8 @@ function createConfigJson(tables, projectName = 'cbmgmtv1') {
   
   // Add each table as a service
   for (const table of tables) {
-    const serviceName = table.tableName.toLowerCase();
+    const camelCaseTableName = tableNameToCamelCase(table.tableName);
+    const serviceName = camelCaseTableName;
     const displayName = table.tableName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
     
     const service = {
@@ -609,7 +738,7 @@ const migrateBakToMongo = async (req, res) => {
     // Create Config.json
     const configJson = createConfigJson(tableSchemas, process.env.PROJECT_NAME || 'cBmgmtV1');
     
-    // Step 8: Migrate each table
+    // Step 8: Migrate each table with proper type conversion
     const migrationResults = [];
     const mongoDbName = process.env.MONGO_DB || 'migrated_data';
     const mongoDb = mongoClient.db(mongoDbName);
@@ -629,46 +758,36 @@ const migrateBakToMongo = async (req, res) => {
         if (rows.length > 0) {
           console.log(`Found ${rows.length} rows in table '${tableName}'`);
           
-          // Prepare data for MongoDB - handle special types
+          // Create a map of original field names to their SQL data types
+          const fieldTypeMap = {};
+          table.schemaFields.forEach(field => {
+            fieldTypeMap[field.originalFieldName] = field.originalDataType;
+          });
+          
+          // Prepare data for MongoDB with proper type conversion
           const mongoDocs = rows.map((row, index) => {
             const doc = {};
-            Object.keys(row).forEach(key => {
-              const value = row[key];
+            Object.keys(row).forEach(originalKey => {
+              const value = row[originalKey];
               
-              // Handle different data types based on schema analysis
-              const fieldSchema = table.schemaFields.find(f => f.fieldName === key);
-              const fieldType = fieldSchema ? fieldSchema.type : 'String';
+              // Find the field schema to get the camelCase name and SQL data type
+              const fieldSchema = table.schemaFields.find(f => 
+                f.originalFieldName === originalKey || toCamelCase(f.originalFieldName) === toCamelCase(originalKey)
+              );
               
-              if (value === null || value === undefined) {
-                doc[key.toLowerCase()] = null;
-              } else if (fieldType === 'Date' && value instanceof Date) {
-                doc[key.toLowerCase()] = value;
-              } else if (fieldType === 'Boolean') {
-                // Convert bit/tinyint to boolean
-                doc[key.toLowerCase()] = Boolean(value);
-              } else if (fieldType === 'Number') {
-                doc[key.toLowerCase()] = Number(value);
-              } else if (fieldType === 'Buffer' && Buffer.isBuffer(value)) {
-                doc[key.toLowerCase()] = value.toString('base64');
-              } else if (typeof value === 'object' && value instanceof sql.TYPES.NVarChar) {
-                doc[key.toLowerCase()] = value.toString();
-              } else if (typeof value === 'string') {
-                doc[key.toLowerCase()] = value.trim();
-              } else {
-                doc[key.toLowerCase()] = value;
-              }
+              // Use camelCase field name from config, fallback to converting original
+              const fieldName = fieldSchema ? fieldSchema.fieldName : toCamelCase(originalKey);
+              const sqlType = fieldSchema ? fieldSchema.originalDataType : 'varchar'; // Default to varchar if not found
+              
+              // Convert value based on SQL data type
+              doc[fieldName] = convertSqlValue(value, sqlType, originalKey);
             });
-            
-            // Add MongoDB _id if not present
-            if (!doc._id) {
-              doc._id = index + 1;
-            }
             
             return doc;
           });
           
-          // Insert into MongoDB
-          const collectionName = tableName.toLowerCase();
+          // Use camelCase for collection name
+          const collectionName = tableNameToCamelCase(tableName);
           const collection = mongoDb.collection(collectionName);
           
           // Clear existing data if any
@@ -677,6 +796,11 @@ const migrateBakToMongo = async (req, res) => {
           
           // Insert new data
           const insertResult = await collection.insertMany(mongoDocs);
+          
+          // Log first document for debugging
+          if (mongoDocs.length > 0) {
+            console.log(`First document sample for ${tableName}:`, JSON.stringify(mongoDocs[0], null, 2));
+          }
           
           migrationResults.push({
             table: tableName,
@@ -707,7 +831,7 @@ const migrateBakToMongo = async (req, res) => {
       }
     }
 
-    // Step 9: Prepare Config.json for download (do NOT save to file system)
+    // Step 9: Prepare Config.json for download
     const configJsonString = JSON.stringify(configJson, null, 2);
     const configFileName = `migration-config-${Date.now()}.json`;
     
@@ -742,13 +866,15 @@ const migrateBakToMongo = async (req, res) => {
         failedTables: tables.length - successfulMigrations,
         totalRowsMigrated: totalRows,
         totalFieldsAnalyzed: totalFields,
-        mongoDatabase: mongoDbName
+        mongoDatabase: mongoDbName,
+        namingConvention: "camelCase" // Indicate naming convention used
       },
       config: {
         fileName: configFileName,
         data: configJsonString, // Send config data directly in response
         services: configJson.services.length,
-        downloadReady: true
+        downloadReady: true,
+        namingConvention: "camelCase"
       },
       details: migrationResults,
       timestamp: new Date().toISOString()
