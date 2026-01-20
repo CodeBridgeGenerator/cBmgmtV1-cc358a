@@ -409,7 +409,7 @@ async function analyzeTableSchema(pool, dbName, tableName) {
 }
 
 // Function to create Config.json structure
-function createConfigJson(tables, projectName = 'cbmgmtv1') {
+function createConfigJson(tables, projectName = 'cbapp1') {
   const config = {
     projectName: projectName,
     description: "Migrated from SQL Server",

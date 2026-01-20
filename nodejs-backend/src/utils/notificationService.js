@@ -56,6 +56,7 @@ function createNotification(context, action, result = null) {
     context.path === "branches" ||
     context.path === "roles" ||
     context.path === "positions" ||
+    context.path === "userTrackerId" ||
     context.path === "forgotPassword"
   ) {
     return context;
